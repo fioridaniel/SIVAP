@@ -1,0 +1,32 @@
+CREATE TABLE produtor_rural(
+	nome VARCHAR(100) NOT NULL,
+	cpf BIGINT,
+	sexo CHAR(1),
+	dt_nasc DATE,
+	endereco VARCHAR(250),
+
+	CONSTRAINT pk_produtor_rural_cpf PRIMARY KEY (cpf), 
+	CONSTRAINT chk_produtor_rural_sexo CHECK (sexo IN ('m', 'f'))
+
+CREATE TABLE propriedade(
+	id SERIAL, 
+	nome VARCHAR(100) NOT NULL,
+	endereco VARCHAR(250) NOT NULL,
+	area DECIMAL(10,2), 
+
+	CONSTRAINT pk_propriedade PRIMARY KEY(id),
+	CONSTRAINT uk_propriedade_nome_endereco UNIQUE(nome, endereco)
+);
+
+CREATE TABLE produtor_propriedade(
+	cpf_produtor_rural BIGINT, 
+	id_propriedade INT,
+
+	CONSTRAINT pk_produtor_propriedade PRIMARY KEY (cpf_produtor_rural, id_propriedade),
+
+	CONSTRAINT fk_produtor_propriedade_produtor FOREIGN KEY (cpf_produtor_rural)
+	REFERENCES produtor_rural(cpf) ON DELETE CASCADE,
+	
+	CONSTRAINT fk_produtor_propriedade_propriedade FOREIGN KEY (id_propriedade)
+	REFERENCES propriedade(id) ON DELETE CASCADE 
+);
