@@ -7,6 +7,7 @@ CREATE TABLE produtor_rural(
 
 	CONSTRAINT pk_produtor_rural_cpf PRIMARY KEY (cpf), 
 	CONSTRAINT chk_produtor_rural_sexo CHECK (sexo IN ('m', 'f'))
+);
 
 CREATE TABLE propriedade(
 	id SERIAL, 
