@@ -1,4 +1,4 @@
-CREATE TABLE produtor_rural(
+CREATE TABLE IF NOT EXISTS produtor_rural(
 	nome VARCHAR(100) NOT NULL,
 	cpf BIGINT,
 	sexo CHAR(1),
@@ -9,7 +9,7 @@ CREATE TABLE produtor_rural(
 	CONSTRAINT chk_produtor_rural_sexo CHECK (sexo IN ('m', 'f'))
 );
 
-CREATE TABLE propriedade(
+CREATE TABLE IF NOT EXISTS propriedade(
 	id SERIAL, 
 	nome VARCHAR(100) NOT NULL,
 	endereco VARCHAR(250) NOT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE propriedade(
 	CONSTRAINT uk_propriedade_nome_endereco UNIQUE(nome, endereco)
 );
 
-CREATE TABLE produtor_propriedade(
+CREATE TABLE IF NOT EXISTS produtor_propriedade(
 	cpf_produtor_rural BIGINT, 
 	id_propriedade INT,
 
@@ -30,4 +30,34 @@ CREATE TABLE produtor_propriedade(
 	
 	CONSTRAINT fk_produtor_propriedade_propriedade FOREIGN KEY (id_propriedade)
 	REFERENCES propriedade(id) ON DELETE CASCADE 
+);
+
+CREATE TABLE IF NOT EXISTS talhao(
+	id_propriedade INT, 
+	id_talhao INT, -- tirei o serial daqui por que assim esse numero seria global para todas as propriedades. nao eh isso o que eu quero.      
+	area DECIMAL(10,2), 
+
+	CONSTRAINT pk_talhao PRIMARY KEY (id_propriedade, id_talhao),
+
+	CONSTRAINT fk_talhao_propriedade FOREIGN KEY (id_propriedade)
+	REFERENCES propriedade(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS safra(
+	id_safra SERIAL, 
+	id_propriedade INT, 
+	id_talhao INT,      
+	dt_plantio DATE,
+	dt_colheita DATE,
+	producao DECIMAL(10, 2), 
+
+	CONSTRAINT pk_safra PRIMARY KEY (id_safra),
+
+	CONSTRAINT fk_safra_propriedade FOREIGN KEY (id_propriedade)
+	REFERENCES propriedade(id) ON DELETE CASCADE, 
+
+	CONSTRAINT fk_safra_talhao FOREIGN KEY (id_propriedade, id_talhao)
+	REFERENCES talhao(id_propriedade, id_talhao) ON DELETE CASCADE, 
+
+	CONSTRAINT uk_safra UNIQUE(id_propriedade, id_talhao, dt_plantio, dt_colheita)
 );
