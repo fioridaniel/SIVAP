@@ -61,3 +61,48 @@ CREATE TABLE IF NOT EXISTS safra(
 
 	CONSTRAINT uk_safra UNIQUE(id_propriedade, id_talhao, dt_plantio, dt_colheita)
 );
+
+CREATE TABLE IF NOT EXISTS condicao_climatica(
+    id_condicao_climatica SERIAL, 
+    id_safra INT NOT NULL,          -- FK para safra, não pode ser nula        
+    precipitacao_mm DECIMAL(5,1),   -- Precipitação em milímetros (ex: 120.5 mm)
+    distribuicao_chuva_nota SMALLINT CHECK (distribuicao_chuva_nota BETWEEN 0 AND 10),
+                                    
+    velocidade_vento_kmh DECIMAL(5,2),
+    temperatura_media_c DECIMAL(4,1), 
+    observacoes TEXT,                
+
+    CONSTRAINT pk_condicao_climatica PRIMARY KEY (id_condicao_climatica),
+    
+	CONSTRAINT fk_condicao_climatica_safra FOREIGN KEY (id_safra)
+    REFERENCES safra(id_safra) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS cultura(
+	id_cultura SERIAL,
+	nome_cultura VARCHAR(30) NOT NULL,
+
+	CONSTRAINT pk_cultura PRIMARY KEY (id_cultura), 
+	
+	CONSTRAINT uk_nome_cultura UNIQUE (nome_cultura)
+);
+
+CREATE TABLE IF NOT EXISTS variedade_cultura(
+	id_variedade_cultura SERIAL,
+	id_cultura INT NOT NULL,             
+	descricao TEXT,                      
+	resistencia_seca SMALLINT,           
+	resistencia_pragas SMALLINT,         
+	ciclo_vegetativo_dias INT,            
+	produtividade_nota SMALLINT,         
+
+	CONSTRAINT pk_variedade_cultura PRIMARY KEY (id_variedade_cultura),
+
+	CONSTRAINT fk_variedade_cultura_cultura FOREIGN KEY (id_cultura)
+	REFERENCES cultura(id_cultura) ON DELETE CASCADE,
+
+	CONSTRAINT chk_resistencia_seca CHECK (resistencia_seca BETWEEN 0 AND 10),
+	CONSTRAINT chk_resistencia_pragas CHECK (resistencia_pragas BETWEEN 0 AND 10),
+	CONSTRAINT chk_produtividade_nota CHECK (produtividade_nota BETWEEN 0 AND 10),
+    CONSTRAINT chk_ciclo_vegetativo_positivo CHECK (ciclo_vegetativo_dias > 0) -- Garante que o ciclo seja positivo
+);
