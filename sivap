@@ -3,20 +3,31 @@ CREATE TABLE IF NOT EXISTS produtor_rural(
 	cpf BIGINT,
 	sexo CHAR(1),
 	dt_nasc DATE,
-	endereco VARCHAR(250),
 
 	CONSTRAINT pk_produtor_rural_cpf PRIMARY KEY (cpf), 
 	CONSTRAINT chk_produtor_rural_sexo CHECK (sexo IN ('m', 'f'))
 );
 
+CREATE TABLE IF NOT EXISTS endereco_produtor(
+    cpf_produtor_rural BIGINT PRIMARY KEY, 
+    rua VARCHAR(200) NOT NULL,
+    numero VARCHAR(30),    
+    cidade VARCHAR(100) NOT NULL, 
+    estado CHAR(2) NOT NULL,
+
+    CONSTRAINT fk_endereco_produtor_rural FOREIGN KEY (cpf_produtor_rural)
+    REFERENCES produtor_rural(cpf) ON DELETE CASCADE -- Se o produtor for deletado, seu endereço também será
+);
+
 CREATE TABLE IF NOT EXISTS propriedade(
-	id SERIAL, 
+	id SERIAL,
 	nome VARCHAR(100) NOT NULL,
-	endereco VARCHAR(250) NOT NULL,
-	area DECIMAL(10,2), 
+	latitude DECIMAL(9,6) NOT NULL,  -- latitude com 6 casas decimais
+	longitude DECIMAL(9,6) NOT NULL, -- longitude com 6 casas decimais
+	area DECIMAL(10,2),
 
 	CONSTRAINT pk_propriedade PRIMARY KEY(id),
-	CONSTRAINT uk_propriedade_nome_endereco UNIQUE(nome, endereco)
+	CONSTRAINT uk_propriedade_nome_localizacao UNIQUE(nome, latitude, longitude) -- Unicidade combinando nome e localização exata
 );
 
 CREATE TABLE IF NOT EXISTS produtor_propriedade(
@@ -46,14 +57,18 @@ CREATE TABLE IF NOT EXISTS talhao(
 CREATE TABLE IF NOT EXISTS safra(
 	id_safra SERIAL, 
 	id_propriedade INT, 
-	id_talhao INT,      
+	id_talhao INT,
+	id_variedade_cultura INT,
 	dt_plantio DATE,
 	dt_colheita DATE,
 	producao DECIMAL(10, 2), 
 
 	CONSTRAINT pk_safra PRIMARY KEY (id_safra),
 
-	CONSTRAINT fk_safra_propriedade FOREIGN KEY (id_propriedade)
+	CONSTRAINT fk_safra_variedade FOREIGN KEY (id_variedade_cultura) 
+	REFERENCES variedade_cultura(id_variedade_cultura) ON DELETE CASCADE,
+
+	CONSTRAINT fk_safra_propriedade FOREIGN KEY (id_propriedade) -- a fk do talhao ja pega uma propriedade valida, entao nao precisaria dessa linha. mas acho que eh legal ter uma coluna so pra isso.
 	REFERENCES propriedade(id) ON DELETE CASCADE, 
 
 	CONSTRAINT fk_safra_talhao FOREIGN KEY (id_propriedade, id_talhao)
@@ -65,7 +80,7 @@ CREATE TABLE IF NOT EXISTS safra(
 CREATE TABLE IF NOT EXISTS condicao_climatica(
     id_condicao_climatica SERIAL, 
     id_safra INT NOT NULL,          -- FK para safra, não pode ser nula        
-    precipitacao_mm DECIMAL(5,1),   -- Precipitação em milímetros (ex: 120.5 mm)
+    precipitacao_mm DECIMAL(5,1),   -- precipitação em milímetros (ex: 120.5 mm)
     distribuicao_chuva_nota SMALLINT CHECK (distribuicao_chuva_nota BETWEEN 0 AND 10),
                                     
     velocidade_vento_kmh DECIMAL(5,2),
@@ -104,5 +119,5 @@ CREATE TABLE IF NOT EXISTS variedade_cultura(
 	CONSTRAINT chk_resistencia_seca CHECK (resistencia_seca BETWEEN 0 AND 10),
 	CONSTRAINT chk_resistencia_pragas CHECK (resistencia_pragas BETWEEN 0 AND 10),
 	CONSTRAINT chk_produtividade_nota CHECK (produtividade_nota BETWEEN 0 AND 10),
-    CONSTRAINT chk_ciclo_vegetativo_positivo CHECK (ciclo_vegetativo_dias > 0) -- Garante que o ciclo seja positivo
+    CONSTRAINT chk_ciclo_vegetativo_positivo CHECK (ciclo_vegetativo_dias > 0) -- garante que o ciclo seja positivo
 );
