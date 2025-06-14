@@ -1,0 +1,129 @@
+INSERT INTO produtor_rural (nome, cpf, sexo, dt_nasc) VALUES
+('Ana Maria Braga', 11122233301, 'f', '1949-04-01'),
+('Rodrigo Hilbert', 22233344402, 'm', '1980-04-22'),
+('Paola Carosella', 33344455503, 'f', '1972-10-30'),
+('Érick Jacquin', 44455566604, 'm', '1964-12-09');
+
+SELECT * FROM produtor_rural;
+###############################################################################
+
+
+INSERT INTO endereco_produtor (cpf_produtor_rural, rua, numero, cidade, estado) VALUES
+(11122233301, 'Avenida Brasil', '1500', 'São Paulo', 'SP'),
+(22233344402, 'Rua das Gaivotas', '78', 'Florianópolis', 'SC'),
+(33344455503, 'Travessa dos Sabores', 'S/N', 'Curitiba', 'PR'),
+(44455566604, 'Place de la Concorde - Apto', '10B', 'Paris (equiv.)', 'EX'); -- Exemplo fictício de exterior
+
+SELECT * FROM endereco_produtor;
+###############################################################################
+
+
+
+-- Endereços das propriedades agora como Latitude e Longitude
+INSERT INTO propriedade (nome, latitude, longitude, area) VALUES
+('Fazenda Culinária do Interior', -21.794000, -48.175800, 180.75), -- Araraquara, SP (Exemplo)
+('Sítio Temperos da Terra', -25.477000, -48.832000, 65.20),       -- Morretes, PR (Exemplo)
+('Chácara Le Petit Chef', -23.530700, -47.135400, 22.50);         -- São Roque, SP (Exemplo)
+
+-- Assumindo que os IDs gerados para propriedade foram 1, 2, 3 respectivamente.
+SELECT * FROM propriedade;
+###############################################################################
+
+
+
+-- Usando os CPFs e IDs de propriedade dos exemplos anteriores
+-- (Fazenda Culinária ID:1, Sítio Temperos ID:2, Chácara Le Petit ID:3)
+INSERT INTO produtor_propriedade (cpf_produtor_rural, id_propriedade) VALUES
+(11122233301, 1), -- Ana Maria na Fazenda Culinária
+(22233344402, 2), -- Rodrigo Hilbert no Sítio Temperos
+(33344455503, 2), -- Paola Carosella também no Sítio Temperos
+(44455566604, 3); -- Érick Jacquin na Chácara Le Petit
+
+SELECT * FROM produtor_propriedade;
+###############################################################################
+
+
+
+INSERT INTO cultura (nome_cultura) VALUES
+('Tomate Italiano'),
+('Manjericão Genovese'),
+('Batata Asterix'),
+('Uva Cabernet Franc');
+
+-- Assumindo que os IDs gerados para cultura foram 1, 2, 3, 4 respectivamente.
+SELECT * FROM cultura;
+###############################################################################
+
+
+
+-- Usando os IDs de cultura dos exemplos anteriores
+-- (Tomate ID:1, Manjericão ID:2, Batata ID:3, Uva ID:4)
+INSERT INTO variedade_cultura (id_cultura, descricao, resistencia_seca, resistencia_pragas, ciclo_vegetativo_dias, produtividade_nota) VALUES
+(1, 'San Marzano Lungo', 6, 7, 80, 8),
+(1, 'Roma VF', 7, 6, 75, 7),
+(2, 'Folha Larga Superbo', 5, 5, 60, 9),
+(3, 'Monalisa (clone B)', 7, 8, 110, 8),
+(4, 'Clone 214', 8, 7, 1825, 9); -- Uva (5 anos para produção comercial)
+
+-- Assumindo que os IDs gerados para variedade_cultura foram 1, 2, 3, 4, 5 respectivamente.
+SELECT * FROM variedade_cultura;
+###############################################################################
+
+
+
+-- Usando os IDs de propriedade dos exemplos anteriores
+-- (Fazenda Culinária ID:1, Sítio Temperos ID:2, Chácara Le Petit ID:3)
+-- Fazenda Culinária (ID:1)
+INSERT INTO talhao (id_propriedade, id_talhao, area) VALUES
+(1, 1, 70.00),
+(1, 2, 50.75),
+(1, 3, 60.00);
+
+-- Sítio Temperos (ID:2)
+INSERT INTO talhao (id_propriedade, id_talhao, area) VALUES
+(2, 1, 30.00),
+(2, 2, 35.20);
+
+-- Chácara Le Petit (ID:3)
+INSERT INTO talhao (id_propriedade, id_talhao, area) VALUES
+(3, 1, 10.00),
+(3, 2, 12.50);
+
+SELECT * FROM talhao;
+###############################################################################
+
+
+
+-- Usando IDs de propriedade, talhão e variedade_cultura dos exemplos anteriores
+-- (Fazenda Culinária ID:1, Sítio Temperos ID:2, Chácara Le Petit ID:3)
+-- (Variedade San Marzano ID:1, Roma VF ID:2, Manjericão Superbo ID:3, Batata Monalisa ID:4, Uva Clone 214 ID:5)
+
+-- Safra na Fazenda Culinária, Talhão 1, com Tomate San Marzano
+INSERT INTO safra (id_propriedade, id_talhao, id_variedade_cultura, dt_plantio, dt_colheita, producao) VALUES
+(1, 1, 1, '2023-09-01', '2023-12-15', 5200.70); -- id_safra = 1 (exemplo)
+
+-- Safra no Sítio Temperos, Talhão 1, com Manjericão Superbo
+INSERT INTO safra (id_propriedade, id_talhao, id_variedade_cultura, dt_plantio, dt_colheita, producao) VALUES
+(2, 1, 3, '2024-01-15', '2024-03-20', 300.50); -- id_safra = 2
+
+-- Safra na Chácara Le Petit, Talhão 1, com Uva Clone 214 (primeira colheita simbólica)
+INSERT INTO safra (id_propriedade, id_talhao, id_variedade_cultura, dt_plantio, dt_colheita, producao) VALUES
+(3, 1, 5, '2020-08-01', '2024-02-28', 150.00); -- id_safra = 3
+
+-- Safra na Fazenda Culinária, Talhão 2, com Batata Monalisa
+INSERT INTO safra (id_propriedade, id_talhao, id_variedade_cultura, dt_plantio, dt_colheita, producao) VALUES
+(1, 2, 4, '2023-05-10', '2023-09-01', 12000.00); -- id_safra = 4
+
+SELECT * FROM safra;
+###############################################################################
+
+
+-- Usando os IDs de safra dos exemplos anteriores
+-- (Safra Tomate ID:1, Manjericão ID:2, Uva ID:3, Batata ID:4)
+INSERT INTO condicao_climatica (id_safra, precipitacao_mm, distribuicao_chuva_nota, velocidade_vento_kmh, temperatura_media_c, observacoes) VALUES
+(1, 350.5, 8, 5.2, 26.5, 'Verão quente, irrigação controlada.'),
+(2, 180.0, 9, 3.1, 24.0, 'Cultivo em estufa, umidade monitorada.'),
+(3, 900.0, 7, 10.5, 22.3, 'Invernos amenos nos últimos anos, bom para desenvolvimento das videiras.'),
+(4, 600.8, 6, 8.7, 19.5, 'Outono com chuvas moderadas, colheita antes das geadas.');
+
+SELECT * FROM condicao_climatica;
