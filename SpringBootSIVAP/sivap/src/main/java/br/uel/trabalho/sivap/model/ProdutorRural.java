@@ -1,11 +1,11 @@
 public class ProdutorRural{
-    private int cpf;
+    private String cpf;
     private String nome;
     private char sexo;
     private Date dt_nasc;
     private String endereco;
 
-    public ProdutorRural(int cpf,  String nome, char sexo, Date dt_nasc, String endereco) {
+    public ProdutorRural(String cpf,  String nome, char sexo, Date dt_nasc, String endereco) {
         this.cpf = cpf;
         this.nome = nome;
         this.sexo = sexo;
@@ -13,11 +13,11 @@ public class ProdutorRural{
         this.endereco = endereco;
     }
 
-    public int getCpf() {
+    public String getCpf() {
         return this.cpf;
     }
 
-    public void setCpf(int cpf) {
+    public void setCpf(String cpf) {
         this.cpf = cpf;
     }
 
