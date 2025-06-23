@@ -1,13 +1,15 @@
 public class Propriedade {
     private int id;
     private String nome;
-    private String endereco;
+    private double latitude;
+    private double longitude;
     private double area;
 
     public Propriedade(int id, String nome, String endereco, double area) {
         this.id = id;
         this.nome = nome;
-        this.endereco = endereco;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.area = area;
     }
 
@@ -27,13 +29,13 @@ public class Propriedade {
         this.nome = nome;
     }
 
-    public String getEndereco() {
-        return endereco;
-    }
+    public double getLatitude() {return latitude;}
 
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
-    }
+    public void setLatitude(double latitude) {this.latitude = latitude;}
+
+    public double getLongitude() {return longitude;}
+
+    public void setLongitude(double longitude) {this.longitude = longitude;}
 
     public double getArea() {
         return area;
