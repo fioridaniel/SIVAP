@@ -1,14 +1,20 @@
 package br.uel.trabalho.sivap.dao;
 
-import br.uel.trabalho.sivap.jdbc.ConnectionFactory;
 import br.uel.trabalho.sivap.model.Propriedade;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class PgPropriedadeDAO implements PropriedadeDAO {
+
+    @Autowired
+    private DataSource dataSource;
 
     /**
      * Insere uma nova propriedade no banco de dados e atualiza o objeto
@@ -21,7 +27,7 @@ public class PgPropriedadeDAO implements PropriedadeDAO {
         String sql = "INSERT INTO propriedade (nome, latitude, longitude, area) VALUES (?, ?, ?, ?);";
 
         // Usando try-with-resources para garantir que a conexão e o statement sejam fechados.
-        try (Connection conn = ConnectionFactory.getInstance().getConnection();
+        try (Connection conn = dataSource.getConnection();
              // A opção Statement.RETURN_GENERATED_KEYS é usada para recuperar o ID gerado pelo banco.
              PreparedStatement pst = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -52,7 +58,7 @@ public class PgPropriedadeDAO implements PropriedadeDAO {
         String sql = "SELECT id, nome, latitude, longitude, area FROM propriedade WHERE id = ?;";
         Propriedade propriedade = null;
 
-        try (Connection conn = ConnectionFactory.getInstance().getConnection();
+        try (Connection conn = dataSource.getConnection();
              PreparedStatement pst = conn.prepareStatement(sql)) {
 
             pst.setInt(1, id);
@@ -81,7 +87,7 @@ public class PgPropriedadeDAO implements PropriedadeDAO {
         String sql = "SELECT id, nome, latitude, longitude, area FROM propriedade ORDER BY nome;";
         List<Propriedade> propriedades = new ArrayList<>();
 
-        try (Connection conn = ConnectionFactory.getInstance().getConnection();
+        try (Connection conn = dataSource.getConnection();
              Statement st = conn.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
 
@@ -108,7 +114,7 @@ public class PgPropriedadeDAO implements PropriedadeDAO {
     public void atualizar(Propriedade propriedade) throws SQLException, IOException, ClassNotFoundException {
         String sql = "UPDATE propriedade SET nome = ?, latitude = ?, longitude = ?, area = ? WHERE id = ?;";
 
-        try (Connection conn = ConnectionFactory.getInstance().getConnection();
+        try (Connection conn = dataSource.getConnection();
              PreparedStatement pst = conn.prepareStatement(sql)) {
 
             pst.setString(1, propriedade.getNome());
@@ -129,7 +135,7 @@ public class PgPropriedadeDAO implements PropriedadeDAO {
     public void deletar(int id) throws SQLException, IOException, ClassNotFoundException {
         String sql = "DELETE FROM propriedade WHERE id = ?;";
 
-        try (Connection conn = ConnectionFactory.getInstance().getConnection();
+        try (Connection conn = dataSource.getConnection();
              PreparedStatement pst = conn.prepareStatement(sql)) {
 
             pst.setInt(1, id);

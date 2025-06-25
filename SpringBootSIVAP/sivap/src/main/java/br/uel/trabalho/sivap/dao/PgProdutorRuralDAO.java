@@ -1,20 +1,26 @@
 package br.uel.trabalho.sivap.dao;
 
-import br.uel.trabalho.sivap.jdbc.ConnectionFactory;
 import br.uel.trabalho.sivap.model.ProdutorRural;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class PgProdutorRuralDAO implements ProdutorRuralDAO {
+
+    @Autowired
+    private DataSource dataSource;
 
     @Override
     public ProdutorRural inserir(ProdutorRural produtor) throws SQLException, IOException, ClassNotFoundException {
         String sql = "INSERT INTO produtores_rurais (cpf, nome, sexo, dt_nasc, endereco) VALUES (?, ?, ?, ?, ?);";
 
-        try (Connection conn = ConnectionFactory.getInstance().getConnection();
+        try (Connection conn = dataSource.getConnection();
              PreparedStatement pst = conn.prepareStatement(sql)) {
 
             pst.setString(1, produtor.getCpf());
@@ -33,7 +39,7 @@ public class PgProdutorRuralDAO implements ProdutorRuralDAO {
         String sql = "SELECT * FROM produtores_rurais WHERE cpf = ?;";
         ProdutorRural produtor = null;
 
-        try (Connection conn = ConnectionFactory.getInstance().getConnection();
+        try (Connection conn = dataSource.getConnection();
              PreparedStatement pst = conn.prepareStatement(sql)) {
 
             pst.setString(1, cpf);
@@ -57,7 +63,7 @@ public class PgProdutorRuralDAO implements ProdutorRuralDAO {
         String sql = "SELECT * FROM produtores_rurais ORDER BY nome;";
         List<ProdutorRural> produtores = new ArrayList<>();
 
-        try (Connection conn = ConnectionFactory.getInstance().getConnection();
+        try (Connection conn = dataSource.getConnection();
              Statement st = conn.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
 
@@ -79,7 +85,7 @@ public class PgProdutorRuralDAO implements ProdutorRuralDAO {
     public void atualizar(ProdutorRural produtor) throws SQLException, IOException, ClassNotFoundException {
         String sql = "UPDATE produtores_rurais SET nome = ?, sexo = ?, dt_nasc = ?, endereco = ? WHERE cpf = ?;";
 
-        try (Connection conn = ConnectionFactory.getInstance().getConnection();
+        try (Connection conn = dataSource.getConnection();
              PreparedStatement pst = conn.prepareStatement(sql)) {
 
             pst.setString(1, produtor.getNome());
@@ -96,7 +102,7 @@ public class PgProdutorRuralDAO implements ProdutorRuralDAO {
     public void deletar(String cpf) throws SQLException, IOException, ClassNotFoundException {
         String sql = "DELETE FROM produtores_rurais WHERE cpf = ?;";
 
-        try (Connection conn = ConnectionFactory.getInstance().getConnection();
+        try (Connection conn = dataSource.getConnection();
              PreparedStatement pst = conn.prepareStatement(sql)) {
 
             pst.setString(1, cpf);
