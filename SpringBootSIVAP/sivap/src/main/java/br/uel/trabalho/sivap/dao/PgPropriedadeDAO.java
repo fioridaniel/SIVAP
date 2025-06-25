@@ -1,11 +1,13 @@
 package br.uel.trabalho.sivap.dao;
 
 import br.uel.trabalho.sivap.model.Propriedade;
+import br.uel.trabalho.sivap.model.ProdutorRural;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,9 +34,9 @@ public class PgPropriedadeDAO implements PropriedadeDAO {
              PreparedStatement pst = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             pst.setString(1, propriedade.getNome());
-            pst.setDouble(2, propriedade.getLatitude());
-            pst.setDouble(3, propriedade.getLongitude());
-            pst.setDouble(4, propriedade.getArea());
+            pst.setBigDecimal(2, propriedade.getLatitude());
+            pst.setBigDecimal(3, propriedade.getLongitude());
+            pst.setBigDecimal(4, propriedade.getArea());
 
             pst.executeUpdate();
 
@@ -66,12 +68,16 @@ public class PgPropriedadeDAO implements PropriedadeDAO {
             try (ResultSet rs = pst.executeQuery()) {
                 if (rs.next()) {
                     String nome = rs.getString("nome");
-                    double latitude = rs.getDouble("latitude");
-                    double longitude = rs.getDouble("longitude");
-                    double area = rs.getDouble("area");
+                    BigDecimal latitude = rs.getBigDecimal("latitude");
+                    BigDecimal longitude = rs.getBigDecimal("longitude");
+                    BigDecimal area = rs.getBigDecimal("area");
 
                     // Cria um novo objeto Propriedade com os dados do banco
                     propriedade = new Propriedade(id, nome, latitude, longitude, area);
+                    
+                    // Carrega os produtores associados
+                    List<ProdutorRural> produtores = buscarProdutoresDaPropriedade(id);
+                    propriedade.setProdutores(produtores);
                 }
             }
         }
@@ -94,12 +100,17 @@ public class PgPropriedadeDAO implements PropriedadeDAO {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String nome = rs.getString("nome");
-                double latitude = rs.getDouble("latitude");
-                double longitude = rs.getDouble("longitude");
-                double area = rs.getDouble("area");
+                BigDecimal latitude = rs.getBigDecimal("latitude");
+                BigDecimal longitude = rs.getBigDecimal("longitude");
+                BigDecimal area = rs.getBigDecimal("area");
 
                 // Cria um novo objeto Propriedade para cada registro
                 Propriedade propriedade = new Propriedade(id, nome, latitude, longitude, area);
+                
+                // Carrega os produtores associados
+                List<ProdutorRural> produtores = buscarProdutoresDaPropriedade(id);
+                propriedade.setProdutores(produtores);
+                
                 propriedades.add(propriedade);
             }
         }
@@ -118,9 +129,9 @@ public class PgPropriedadeDAO implements PropriedadeDAO {
              PreparedStatement pst = conn.prepareStatement(sql)) {
 
             pst.setString(1, propriedade.getNome());
-            pst.setDouble(2, propriedade.getLatitude());
-            pst.setDouble(3, propriedade.getLongitude());
-            pst.setDouble(4, propriedade.getArea());
+            pst.setBigDecimal(2, propriedade.getLatitude());
+            pst.setBigDecimal(3, propriedade.getLongitude());
+            pst.setBigDecimal(4, propriedade.getArea());
             pst.setInt(5, propriedade.getId());
 
             pst.executeUpdate();
@@ -141,5 +152,62 @@ public class PgPropriedadeDAO implements PropriedadeDAO {
             pst.setInt(1, id);
             pst.executeUpdate();
         }
+    }
+
+    @Override
+    public void associarProdutor(int idPropriedade, String cpfProdutor) throws SQLException, IOException, ClassNotFoundException {
+        String sql = "INSERT INTO produtor_propriedade (id_propriedade, cpf_produtor_rural) VALUES (?, ?);";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement pst = conn.prepareStatement(sql)) {
+
+            pst.setInt(1, idPropriedade);
+            pst.setString(2, cpfProdutor);
+
+            pst.executeUpdate();
+        }
+    }
+
+    @Override
+    public void desassociarProdutor(int idPropriedade, String cpfProdutor) throws SQLException, IOException, ClassNotFoundException {
+        String sql = "DELETE FROM produtor_propriedade WHERE id_propriedade = ? AND cpf_produtor_rural = ?;";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement pst = conn.prepareStatement(sql)) {
+
+            pst.setInt(1, idPropriedade);
+            pst.setString(2, cpfProdutor);
+
+            pst.executeUpdate();
+        }
+    }
+
+    @Override
+    public List<ProdutorRural> buscarProdutoresDaPropriedade(int idPropriedade) throws SQLException, IOException, ClassNotFoundException {
+        String sql = "SELECT pr.cpf, pr.nome, pr.sexo, pr.dt_nasc " +
+                    "FROM produtor_rural pr " +
+                    "INNER JOIN produtor_propriedade pp ON pr.cpf = pp.cpf_produtor_rural " +
+                    "WHERE pp.id_propriedade = ?;";
+        
+        List<ProdutorRural> produtores = new ArrayList<>();
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement pst = conn.prepareStatement(sql)) {
+
+            pst.setInt(1, idPropriedade);
+
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    String cpf = rs.getString("cpf");
+                    String nome = rs.getString("nome");
+                    char sexo = rs.getString("sexo").charAt(0);
+                    java.util.Date dtNasc = rs.getDate("dt_nasc");
+
+                    ProdutorRural produtor = new ProdutorRural(cpf, nome, sexo, dtNasc);
+                    produtores.add(produtor);
+                }
+            }
+        }
+        return produtores;
     }
 }

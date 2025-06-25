@@ -1,20 +1,22 @@
 package br.uel.trabalho.sivap.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class ProdutorRural{
     private String cpf;
     private String nome;
     private char sexo;
     private Date dt_nasc;
-    private String endereco;
+    private List<Propriedade> propriedades;
 
-    public ProdutorRural(String cpf,  String nome, char sexo, Date dt_nasc, String endereco) {
+    public ProdutorRural(String cpf, String nome, char sexo, Date dt_nasc) {
         this.cpf = cpf;
         this.nome = nome;
         this.sexo = sexo;
         this.dt_nasc = dt_nasc;
-        this.endereco = endereco;
+        this.propriedades = new ArrayList<>();
     }
 
     public String getCpf() {
@@ -49,13 +51,21 @@ public class ProdutorRural{
         this.dt_nasc = dt_nasc;
     }
 
-    public String getEndereco() {
-        return this.endereco;
+    public List<Propriedade> getPropriedades() {
+        return this.propriedades;
     }
 
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
+    public void setPropriedades(List<Propriedade> propriedades) {
+        this.propriedades = propriedades;
     }
 
+    public void adicionarPropriedade(Propriedade propriedade) {
+        if (!this.propriedades.contains(propriedade)) {
+            this.propriedades.add(propriedade);
+        }
+    }
+
+    public void removerPropriedade(Propriedade propriedade) {
+        this.propriedades.remove(propriedade);
+    }
 }
-

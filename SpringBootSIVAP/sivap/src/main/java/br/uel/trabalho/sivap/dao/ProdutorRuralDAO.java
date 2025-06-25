@@ -1,6 +1,7 @@
 package br.uel.trabalho.sivap.dao;
 
 import br.uel.trabalho.sivap.model.ProdutorRural;
+import br.uel.trabalho.sivap.model.Propriedade;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -38,4 +39,25 @@ public interface ProdutorRuralDAO {
      * @param cpf O CPF do produtor a ser removido.
      */
     void deletar(String cpf) throws SQLException, IOException, ClassNotFoundException;
+
+    /**
+     * Associa uma propriedade a um produtor rural.
+     * @param cpfProdutor O CPF do produtor.
+     * @param idPropriedade O ID da propriedade.
+     */
+    void associarPropriedade(String cpfProdutor, int idPropriedade) throws SQLException, IOException, ClassNotFoundException;
+
+    /**
+     * Remove a associação entre um produtor rural e uma propriedade.
+     * @param cpfProdutor O CPF do produtor.
+     * @param idPropriedade O ID da propriedade.
+     */
+    void desassociarPropriedade(String cpfProdutor, int idPropriedade) throws SQLException, IOException, ClassNotFoundException;
+
+    /**
+     * Busca todas as propriedades associadas a um produtor rural.
+     * @param cpfProdutor O CPF do produtor.
+     * @return Lista de propriedades associadas ao produtor.
+     */
+    List<Propriedade> buscarPropriedadesDoProdutor(String cpfProdutor) throws SQLException, IOException, ClassNotFoundException;
 }
