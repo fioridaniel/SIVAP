@@ -1,3 +1,5 @@
+package br.uel.trabalho.sivap.model;
+
 public class CondicaoClimatica {
     public double precipitacao;
     public double temperatura;

@@ -1,3 +1,5 @@
+package br.uel.trabalho.sivap.model;
+
 public class Propriedade {
     private int id;
     private String nome;
@@ -5,7 +7,7 @@ public class Propriedade {
     private double longitude;
     private double area;
 
-    public Propriedade(int id, String nome, String endereco, double area) {
+    public Propriedade(int id, String nome, double latitude, double longitude, double area) {
         this.id = id;
         this.nome = nome;
         this.latitude = latitude;

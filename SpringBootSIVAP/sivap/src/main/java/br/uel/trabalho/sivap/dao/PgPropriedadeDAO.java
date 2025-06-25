@@ -1,7 +1,7 @@
-package dao;
+package br.uel.trabalho.sivap.dao;
 
-import jdbc.ConnectionFactory;
-import model.Propriedade;
+import br.uel.trabalho.sivap.jdbc.ConnectionFactory;
+import br.uel.trabalho.sivap.model.Propriedade;
 
 import java.io.IOException;
 import java.sql.*;

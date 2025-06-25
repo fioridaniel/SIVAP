@@ -1,3 +1,5 @@
+package br.uel.trabalho.sivap.model;
+
 public class Talhao {
     private int id;
     private double area;

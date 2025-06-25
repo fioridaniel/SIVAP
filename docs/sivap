@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS produtor_rural(
 	nome VARCHAR(100) NOT NULL,
-	cpf BIGINT,
+	cpf VARCHAR(11),  -- Número sem "." e "-"
 	sexo CHAR(1),
 	dt_nasc DATE,
 

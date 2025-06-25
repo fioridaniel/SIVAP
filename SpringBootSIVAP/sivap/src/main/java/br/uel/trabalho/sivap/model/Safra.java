@@ -1,3 +1,7 @@
+package br.uel.trabalho.sivap.model;
+
+import java.util.Date;
+
 public class Safra {
     public double producao;
     public Date dt_plantio;
@@ -10,7 +14,7 @@ public class Safra {
     }
 
     public double getProdutividade() {
-        return this.producao
+        return this.producao;
     }
 
     public void setProducao(double producao) {

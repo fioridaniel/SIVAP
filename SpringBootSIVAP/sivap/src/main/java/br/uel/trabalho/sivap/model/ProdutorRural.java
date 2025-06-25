@@ -1,3 +1,7 @@
+package br.uel.trabalho.sivap.model;
+
+import java.util.Date;
+
 public class ProdutorRural{
     private String cpf;
     private String nome;

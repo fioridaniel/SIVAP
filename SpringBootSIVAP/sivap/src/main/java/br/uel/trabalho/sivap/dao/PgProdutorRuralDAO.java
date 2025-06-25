@@ -1,7 +1,7 @@
-package dao;
+package br.uel.trabalho.sivap.dao;
 
-import jdbc.ConnectionFactory;
-import model.ProdutorRural;
+import br.uel.trabalho.sivap.jdbc.ConnectionFactory;
+import br.uel.trabalho.sivap.model.ProdutorRural;
 
 import java.io.IOException;
 import java.sql.*;
@@ -14,11 +14,10 @@ public class PgProdutorRuralDAO implements ProdutorRuralDAO {
     public ProdutorRural inserir(ProdutorRural produtor) throws SQLException, IOException, ClassNotFoundException {
         String sql = "INSERT INTO produtores_rurais (cpf, nome, sexo, dt_nasc, endereco) VALUES (?, ?, ?, ?, ?);";
 
-        // Usando try-with-resources para garantir que a conexão e o statement sejam fechados.
         try (Connection conn = ConnectionFactory.getInstance().getConnection();
              PreparedStatement pst = conn.prepareStatement(sql)) {
 
-            pst.setInt(1, produtor.getCpf());
+            pst.setString(1, produtor.getCpf());
             pst.setString(2, produtor.getNome());
             pst.setString(3, String.valueOf(produtor.getSexo())); // Converte char para String para o JDBC
             pst.setDate(4, new java.sql.Date(produtor.getDt_nasc().getTime())); // Converte java.util.Date para java.sql.Date
@@ -37,7 +36,7 @@ public class PgProdutorRuralDAO implements ProdutorRuralDAO {
         try (Connection conn = ConnectionFactory.getInstance().getConnection();
              PreparedStatement pst = conn.prepareStatement(sql)) {
 
-            pst.setInt(1, cpf);
+            pst.setString(1, cpf);
 
             try (ResultSet rs = pst.executeQuery()) {
                 if (rs.next()) {
@@ -87,7 +86,7 @@ public class PgProdutorRuralDAO implements ProdutorRuralDAO {
             pst.setString(2, String.valueOf(produtor.getSexo()));
             pst.setDate(3, new java.sql.Date(produtor.getDt_nasc().getTime()));
             pst.setString(4, produtor.getEndereco());
-            pst.setInt(5, produtor.getCpf());
+            pst.setString(5, produtor.getCpf());
 
             pst.executeUpdate();
         }
@@ -100,7 +99,7 @@ public class PgProdutorRuralDAO implements ProdutorRuralDAO {
         try (Connection conn = ConnectionFactory.getInstance().getConnection();
              PreparedStatement pst = conn.prepareStatement(sql)) {
 
-            pst.setInt(1, cpf);
+            pst.setString(1, cpf);
             pst.executeUpdate();
         }
     }

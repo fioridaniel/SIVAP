@@ -1,6 +1,6 @@
-package dao;
+package br.uel.trabalho.sivap.dao;
 
-import model.Propriedade;
+import br.uel.trabalho.sivap.model.Propriedade;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
