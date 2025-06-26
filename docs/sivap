@@ -1,22 +1,11 @@
 CREATE TABLE IF NOT EXISTS produtor_rural(
 	nome VARCHAR(100) NOT NULL,
-	cpf BIGINT,
+	cpf VARCHAR(11),  -- Número sem "." e "-"
 	sexo CHAR(1),
 	dt_nasc DATE,
 
 	CONSTRAINT pk_produtor_rural_cpf PRIMARY KEY (cpf), 
 	CONSTRAINT chk_produtor_rural_sexo CHECK (sexo IN ('m', 'f'))
-);
-
-CREATE TABLE IF NOT EXISTS endereco_produtor(
-    cpf_produtor_rural BIGINT PRIMARY KEY, 
-    rua VARCHAR(200) NOT NULL,
-    numero VARCHAR(30),    
-    cidade VARCHAR(100) NOT NULL, 
-    estado CHAR(2) NOT NULL,
-
-    CONSTRAINT fk_endereco_produtor_rural FOREIGN KEY (cpf_produtor_rural)
-    REFERENCES produtor_rural(cpf) ON DELETE CASCADE -- Se o produtor for deletado, seu endereço também será
 );
 
 CREATE TABLE IF NOT EXISTS propriedade(
@@ -83,7 +72,7 @@ CREATE TABLE IF NOT EXISTS condicao_climatica(
     precipitacao_mm DECIMAL(5,1),   -- precipitação em milímetros (ex: 120.5 mm)
     distribuicao_chuva_nota SMALLINT CHECK (distribuicao_chuva_nota BETWEEN 0 AND 10),
                                     
-    velocidade_vento_kmh DECIMAL(5,2),
+    velocidade_max_vento_kmh SMALLINT,
     temperatura_media_c DECIMAL(4,1), 
     observacoes TEXT,                
 

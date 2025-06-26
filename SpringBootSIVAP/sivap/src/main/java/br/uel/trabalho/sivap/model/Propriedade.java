@@ -1,14 +1,24 @@
+package br.uel.trabalho.sivap.model;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Propriedade {
     private int id;
     private String nome;
-    private String endereco;
-    private double area;
+    private BigDecimal latitude;
+    private BigDecimal longitude;
+    private BigDecimal area;
+    private List<ProdutorRural> produtores;
 
-    public Propriedade(int id, String nome, String endereco, double area) {
+    public Propriedade(int id, String nome, BigDecimal latitude, BigDecimal longitude, BigDecimal area) {
         this.id = id;
         this.nome = nome;
-        this.endereco = endereco;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.area = area;
+        this.produtores = new ArrayList<>();
     }
 
     public int getId() {
@@ -27,20 +37,35 @@ public class Propriedade {
         this.nome = nome;
     }
 
-    public String getEndereco() {
-        return endereco;
-    }
+    public BigDecimal getLatitude() {return latitude;}
 
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
-    }
+    public void setLatitude(BigDecimal latitude) {this.latitude = latitude;}
 
-    public double getArea() {
+    public BigDecimal getLongitude() {return longitude;}
+
+    public void setLongitude(BigDecimal longitude) {this.longitude = longitude;}
+
+    public BigDecimal getArea() {
         return area;
     }
 
-    public void setArea(double area) {
+    public void setArea(BigDecimal area) {
         this.area = area;
     }
 
+    public List<ProdutorRural> getProdutores() {
+        return produtores;
+    }
+
+    public void setProdutores(List<ProdutorRural> produtores) {
+        this.produtores = produtores;
+    }
+
+    public void adicionarProdutor(ProdutorRural produtor) {
+        this.produtores.add(produtor);
+    }
+
+    public void removerProdutor(ProdutorRural produtor) {
+        this.produtores.remove(produtor);
+    }
 }
