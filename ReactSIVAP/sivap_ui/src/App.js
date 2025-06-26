@@ -1,24 +1,29 @@
-import logo from './logo.svg';
 import './App.css';
+import { useState } from 'react';
 
 function App() {
+  /* estados utilizados */
+  const [nomeCultura, setNomeCultura] = useState('');
+  const [idCultura, setIdCultura] = useState('');
+  
+  const handleSubmit = () => {
+    alert("nome da cultura: " + nomeCultura);
+    alert("id da cultura: " + idCultura);
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <form onSubmit={handleSubmit}>
+        <label>
+          Nome da cultura:
+          <input type="text" onChange={(e) => setNomeCultura(e.target.value)} />
+        </label>
+
+        <label>
+          ID da cultura:
+          <input type="text" onChange={(e) => setIdCultura(e.target.value)} />
+        </label>        
+        <input type="submit" value="Submit" />
+    </form>
   );
 }
 
