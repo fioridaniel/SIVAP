@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS condicao_climatica(
     precipitacao_mm DECIMAL(5,1),   -- precipitação em milímetros (ex: 120.5 mm)
     distribuicao_chuva_nota SMALLINT CHECK (distribuicao_chuva_nota BETWEEN 0 AND 10),
                                     
-    velocidade_vento_kmh DECIMAL(5,2),
+    velocidade_max_vento_kmh SMALLINT,
     temperatura_media_c DECIMAL(4,1), 
     observacoes TEXT,                
 
