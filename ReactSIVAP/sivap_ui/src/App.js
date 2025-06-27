@@ -1,30 +1,24 @@
 import './App.css';
 import { useState } from 'react';
+import { useEffect } from 'react';
 
 function App() {
-  /* estados utilizados */
-  const [nomeCultura, setNomeCultura] = useState('');
-  const [idCultura, setIdCultura] = useState('');
+  const [dado, setDado] = useState('');
   
-  const handleSubmit = () => {
-    alert("nome da cultura: " + nomeCultura);
-    alert("id da cultura: " + idCultura);
-  }
+  useEffect(() => {
+    /* os then sao encadeados. a ordem importa */
+      fetch('http://localhost:8080/produtores')
+      .then(response => response.json())
+      .then(data => { 
+        console.log(data[0].cpf);
+        setDado(data[0].cpf); 
+      })
+      .catch(error => console.error('Erro ao buscar mensagem:', error));
+  }, []);
 
   return (
-    <form onSubmit={handleSubmit}>
-        <label>
-          Nome da cultura:
-          <input type="text" onChange={(e) => setNomeCultura(e.target.value)} />
-        </label>
-
-        <label>
-          ID da cultura:
-          <input type="text" onChange={(e) => setIdCultura(e.target.value)} />
-        </label>        
-        <input type="submit" value="Submit" />
-    </form>
-  );
+    <h1>Mensagem do server: {dado}</h1>
+  )
 }
 
 export default App;
