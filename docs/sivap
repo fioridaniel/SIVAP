@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS propriedade(
 );
 
 CREATE TABLE IF NOT EXISTS produtor_propriedade(
-	cpf_produtor_rural BIGINT, 
+	cpf_produtor_rural VARCHAR(11), 
 	id_propriedade INT,
 
 	CONSTRAINT pk_produtor_propriedade PRIMARY KEY (cpf_produtor_rural, id_propriedade),

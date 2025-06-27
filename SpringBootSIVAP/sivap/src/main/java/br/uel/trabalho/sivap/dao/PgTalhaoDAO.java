@@ -18,17 +18,26 @@ public class PgTalhaoDAO implements TalhaoDAO {
 
     @Override
     public Talhao inserir(Talhao talhao) throws SQLException, IOException, ClassNotFoundException {
-        String sql = "INSERT INTO talhao (id_propriedade, area) VALUES (?, ?)";
+        // Primeiro, obter o próximo ID disponível para esta propriedade
+        String getNextIdSql = "SELECT COALESCE(MAX(id_talhao), 0) + 1 FROM talhao WHERE id_propriedade = ?";
         try (Connection conn = dataSource.getConnection();
-             PreparedStatement pst = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement pst = conn.prepareStatement(getNextIdSql)) {
             pst.setInt(1, talhao.getId_propriedade());
-            pst.setBigDecimal(2, talhao.getArea());
-            pst.executeUpdate();
-            try (ResultSet rs = pst.getGeneratedKeys()) {
+            try (ResultSet rs = pst.executeQuery()) {
                 if (rs.next()) {
                     talhao.setId_talhao(rs.getInt(1));
                 }
             }
+        }
+        
+        // Agora inserir o talhão com o ID gerado
+        String sql = "INSERT INTO talhao (id_propriedade, id_talhao, area) VALUES (?, ?, ?)";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setInt(1, talhao.getId_propriedade());
+            pst.setInt(2, talhao.getId_talhao());
+            pst.setBigDecimal(3, talhao.getArea());
+            pst.executeUpdate();
         }
         return talhao;
     }
