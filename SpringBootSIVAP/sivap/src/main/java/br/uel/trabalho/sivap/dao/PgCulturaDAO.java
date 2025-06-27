@@ -18,10 +18,10 @@ public class PgCulturaDAO implements CulturaDAO {
 
     @Override
     public Cultura inserir(Cultura cultura) throws SQLException, IOException, ClassNotFoundException {
-        String sql = "INSERT INTO cultura (nome) VALUES (?)";
+        String sql = "INSERT INTO cultura (nome_cultura) VALUES (?)";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement pst = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            pst.setString(1, cultura.getNome());
+            pst.setString(1, cultura.getNome_cultura());
             pst.executeUpdate();
             try (ResultSet rs = pst.getGeneratedKeys()) {
                 if (rs.next()) {
@@ -33,16 +33,16 @@ public class PgCulturaDAO implements CulturaDAO {
     }
 
     @Override
-    public Cultura buscaPorId(int id) throws SQLException, IOException, ClassNotFoundException {
-        String sql = "SELECT id, nome FROM cultura WHERE id = ?";
+    public Cultura buscaPorId(int id_cultura) throws SQLException, IOException, ClassNotFoundException {
+        String sql = "SELECT id_cultura, nome_cultura FROM cultura WHERE id_cultura = ?";
         Cultura cultura = null;
         try (Connection conn = dataSource.getConnection();
              PreparedStatement pst = conn.prepareStatement(sql)) {
-            pst.setInt(1, id);
+            pst.setInt(1, id_cultura);
             try (ResultSet rs = pst.executeQuery()) {
                 if (rs.next()) {
-                    String nome = rs.getString("nome");
-                    cultura = new Cultura(id, nome);
+                    String nome_cultura = rs.getString("nome_cultura");
+                    cultura = new Cultura(id_cultura, nome_cultura);
                 }
             }
         }
@@ -51,15 +51,15 @@ public class PgCulturaDAO implements CulturaDAO {
 
     @Override
     public List<Cultura> listarTodos() throws SQLException, IOException, ClassNotFoundException {
-        String sql = "SELECT id, nome FROM cultura ORDER BY nome";
+        String sql = "SELECT id_cultura, nome_cultura FROM cultura ORDER BY nome_cultura";
         List<Cultura> culturas = new ArrayList<>();
         try (Connection conn = dataSource.getConnection();
              Statement st = conn.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
             while (rs.next()) {
-                int id = rs.getInt("id");
-                String nome = rs.getString("nome");
-                culturas.add(new Cultura(id, nome));
+                int id_cultura = rs.getInt("id_cultura");
+                String nome_cultura = rs.getString("nome_cultura");
+                culturas.add(new Cultura(id_cultura, nome_cultura));
             }
         }
         return culturas;
@@ -67,21 +67,21 @@ public class PgCulturaDAO implements CulturaDAO {
 
     @Override
     public void atualizar(Cultura cultura) throws SQLException, IOException, ClassNotFoundException {
-        String sql = "UPDATE cultura SET nome = ? WHERE id = ?";
+        String sql = "UPDATE cultura SET nome_cultura = ? WHERE id_cultura = ?";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement pst = conn.prepareStatement(sql)) {
-            pst.setString(1, cultura.getNome());
-            pst.setInt(2, cultura.getId());
+            pst.setString(1, cultura.getNome_cultura());
+            pst.setInt(2, cultura.getId_cultura());
             pst.executeUpdate();
         }
     }
 
     @Override
-    public void deletar(int id) throws SQLException, IOException, ClassNotFoundException {
-        String sql = "DELETE FROM cultura WHERE id = ?";
+    public void deletar(int id_cultura) throws SQLException, IOException, ClassNotFoundException {
+        String sql = "DELETE FROM cultura WHERE id_cultura = ?";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement pst = conn.prepareStatement(sql)) {
-            pst.setInt(1, id);
+            pst.setInt(1, id_cultura);
             pst.executeUpdate();
         }
     }

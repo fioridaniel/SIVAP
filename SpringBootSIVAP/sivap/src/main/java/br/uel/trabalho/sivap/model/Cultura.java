@@ -9,7 +9,7 @@ public class Cultura {
         this.nome = nome;
     }
 
-    public int getId() {
+    public int getId_cultura() {
         return id;
     }
 
@@ -17,11 +17,11 @@ public class Cultura {
         this.id = id;
     }
 
-    public String getNome() {
+    public String getNome_cultura() {
         return nome;
     }
 
-    public void setNome(String nome) {
+    public void setNome_cultura(String nome) {
         this.nome = nome;
     }
 
