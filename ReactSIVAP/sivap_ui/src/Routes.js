@@ -5,6 +5,7 @@ export default function AppRoutes() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      
       {/* Outras rotas podem ser adicionadas aqui */}
     </Routes>
   );
