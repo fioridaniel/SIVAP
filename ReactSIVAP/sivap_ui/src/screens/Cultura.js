@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import '../styles/Cultura.css';
 
 const Cultura = () => {
   const [nomeCultura, setNomeCultura] = useState('');
@@ -8,6 +9,7 @@ const Cultura = () => {
 
     if(!nomeCultura) {
       alert("Preencha todos os campos para enviar os dados");
+      return;
     }
 
     try {
@@ -19,23 +21,51 @@ const Cultura = () => {
         body: JSON.stringify({
           nome_cultura: nomeCultura
         })
-      })
+      });
+      
+      if (response.ok) {
+        alert("Cultura cadastrada com sucesso!");
+        setNomeCultura('');
+      } else {
+        alert("Erro ao cadastrar cultura");
+      }
     }
-
     catch(error) {
       console.log("erro ao processar request: " + error);
+      alert("Erro de conexão com o servidor");
     }
-}
+  }
 
   return (
-    <div>
-      <label>
-        Nome Cultura:
-        <input type="text" onChange={(e) => setNomeCultura(e.target.value)} />
-      </label>
-      <br />
+    <div className="cultura-container">
+      <div className="cultura-left">
+        <div className="cultura-logo">🌱 AgroSIVAP</div>
+        <h1>Cadastrar<br />Cultura</h1>
+        <p>Registre uma nova cultura para seu sistema</p>
+        
+        <form className="cultura-form" onSubmit={sendForm}>
+          <label>
+            Nome da Cultura:
+            <input 
+              type="text" 
+              value={nomeCultura}
+              onChange={(e) => setNomeCultura(e.target.value)}
+              placeholder="Digite o nome da cultura (ex: Milho, Soja, Trigo...)"
+              required
+            />
+          </label>
+          
+          <button type="submit">Cadastrar Cultura</button>
+        </form>
+      </div>
       
-      <button onClick={sendForm}>Submit</button>
+      <div className="cultura-right">
+        <div className="placeholder-img">
+          🌽<br />
+          Gestão de<br />
+          Culturas
+        </div>
+      </div>
     </div>
   );
 }

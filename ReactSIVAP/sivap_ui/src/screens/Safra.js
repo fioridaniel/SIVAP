@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import '../styles/Safra.css';
 
 const Safra = () => {
   const [idPropriedade, setIdPropriedade] = useState('');
@@ -13,6 +14,7 @@ const Safra = () => {
 
     if(!idPropriedade || !idTalhao || !idVariedadeCultura || !dtPlantio || !dtColheita || !producao) {
       alert("Preencha todos os campos para enviar os dados");
+      return;
     }
 
     try {
@@ -29,58 +31,116 @@ const Safra = () => {
           dt_colheita: dtColheita,
           producao: parseFloat(producao)
         })
-      })
+      });
+      
+      if (response.ok) {
+        alert("Safra cadastrada com sucesso!");
+        setIdPropriedade('');
+        setIdTalhao('');
+        setIdVariedadeCultura('');
+        setDtPlantio('');
+        setDtColheita('');
+        setProducao('');
+      } else {
+        alert("Erro ao cadastrar safra");
+      }
     }
-
     catch(error) {
       console.log("erro ao processar request: " + error);
+      alert("Erro de conexão com o servidor");
     }
-}
+  }
 
   return (
-    <div>
-      <h2>Formulário Safra</h2>
-      <div onSubmit={sendForm}>
-        <label>
-          ID Propriedade:
-          <input type="text" onChange={(e) => setIdPropriedade(e.target.value)} />
-        </label>
-        <br />
+    <div className="safra-container">
+      <div className="safra-left">
+        <div className="safra-logo">🌱 AgroSIVAP</div>
+        <h1>Cadastrar<br />Safra</h1>
+        <p>Registre uma nova safra para controle de produção</p>
+        
+        <form className="safra-form" onSubmit={sendForm}>
+          <div className="form-row">
+            <div className="form-group">
+              <label>ID da Propriedade:</label>
+              <input 
+                type="number" 
+                value={idPropriedade}
+                onChange={(e) => setIdPropriedade(e.target.value)}
+                placeholder="Digite o ID da propriedade"
+                required
+              />
+            </div>
 
-        <label>
-          ID Talhão:
-          <input type="text" onChange={(e) => setIdTalhao(e.target.value)} />
-        </label>
-        <br />
-        
-        <label>
-          ID Variedade Cultura:
-          <input type="text" onChange={(e) => setIdVariedadeCultura(e.target.value)} />
-        </label>
-        <br />
-        
-        <label>
-          Data Plantio:
-          <input type="date" onChange={(e) => setDtPlantio(e.target.value)} />
-        </label>
-        <br />
-        
-        <label>
-          Data Colheita:
-          <input type="date" onChange={(e) => setDtColheita(e.target.value)} />
-        </label>
-        <br />
-        
-        <label>
-          Produção:
-          <input type="text" onChange={(e) => setProducao(e.target.value)} />
-        </label>
-        <br />
-        
-        <button onClick={sendForm}>Submit</button>
+            <div className="form-group">
+              <label>ID do Talhão:</label>
+              <input 
+                type="number" 
+                value={idTalhao}
+                onChange={(e) => setIdTalhao(e.target.value)}
+                placeholder="Digite o ID do talhão"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="form-row">
+            <div className="form-group">
+              <label>ID Variedade da Cultura:</label>
+              <input 
+                type="number" 
+                value={idVariedadeCultura}
+                onChange={(e) => setIdVariedadeCultura(e.target.value)}
+                placeholder="Digite o ID da variedade"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Produção (kg):</label>
+              <input 
+                type="number" 
+                step="0.01"
+                value={producao}
+                onChange={(e) => setProducao(e.target.value)}
+                placeholder="Digite a produção em kg"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="form-row">
+            <div className="form-group">
+              <label>Data de Plantio:</label>
+              <input 
+                type="date" 
+                value={dtPlantio}
+                onChange={(e) => setDtPlantio(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Data de Colheita:</label>
+              <input 
+                type="date" 
+                value={dtColheita}
+                onChange={(e) => setDtColheita(e.target.value)}
+                required
+              />
+            </div>
+          </div>
+          
+          <button type="submit">Cadastrar Safra</button>
+        </form>
       </div>
-
-      <h2>Formulário Cultura</h2>
+      
+      <div className="safra-right">
+        <div className="placeholder-img">
+          🌾<br />
+          Controle de<br />
+          Safras
+        </div>
+      </div>
     </div>
   );
 }
