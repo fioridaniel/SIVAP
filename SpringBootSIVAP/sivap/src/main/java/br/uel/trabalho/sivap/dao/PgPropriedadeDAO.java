@@ -210,4 +210,40 @@ public class PgPropriedadeDAO implements PropriedadeDAO {
         }
         return produtores;
     }
+
+    @Override
+    public List<Propriedade> buscarPropriedadesDoProdutor(String cpfProdutor) throws SQLException, IOException, ClassNotFoundException {
+        String sql = "SELECT p.id, p.nome, p.latitude, p.longitude, p.area " +
+                    "FROM propriedade p " +
+                    "INNER JOIN produtor_propriedade pp ON p.id = pp.id_propriedade " +
+                    "WHERE pp.cpf_produtor_rural = ? " +
+                    "ORDER BY p.nome;";
+        
+        List<Propriedade> propriedades = new ArrayList<>();
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement pst = conn.prepareStatement(sql)) {
+
+            pst.setString(1, cpfProdutor);
+
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    int id = rs.getInt("id");
+                    String nome = rs.getString("nome");
+                    BigDecimal latitude = rs.getBigDecimal("latitude");
+                    BigDecimal longitude = rs.getBigDecimal("longitude");
+                    BigDecimal area = rs.getBigDecimal("area");
+
+                    Propriedade propriedade = new Propriedade(id, nome, latitude, longitude, area);
+                    
+                    // Carrega os produtores associados
+                    List<ProdutorRural> produtores = buscarProdutoresDaPropriedade(id);
+                    propriedade.setProdutores(produtores);
+                    
+                    propriedades.add(propriedade);
+                }
+            }
+        }
+        return propriedades;
+    }
 }

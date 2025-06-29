@@ -1,4 +1,5 @@
 import './App.css';
+import './styles/Login.css';
 import { BrowserRouter as Router } from "react-router-dom";
 import AppRoutes from "./Routes";
 

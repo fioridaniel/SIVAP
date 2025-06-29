@@ -21,6 +21,11 @@ public class TalhaoController {
         return talhaoDAO.listarTodos();
     }
 
+    @GetMapping("/propriedade/{idPropriedade}")
+    public List<Talhao> listarPorPropriedade(@PathVariable int idPropriedade) throws SQLException, IOException, ClassNotFoundException {
+        return talhaoDAO.listarPorPropriedade(idPropriedade);
+    }
+
     @GetMapping("/{idPropriedade}/{idTalhao}")
     public Talhao buscarPorId(@PathVariable int idPropriedade, @PathVariable int idTalhao) throws SQLException, IOException, ClassNotFoundException {
         return talhaoDAO.buscaPorId(idPropriedade, idTalhao);
