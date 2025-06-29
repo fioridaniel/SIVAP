@@ -28,7 +28,12 @@ public class PropriedadeController {
 
     @PostMapping
     public void criar(@RequestBody Propriedade propriedade) throws SQLException, IOException, ClassNotFoundException {
-        propriedadeDAO.inserir(propriedade);
+        try {
+            propriedadeDAO.inserir(propriedade);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @PutMapping("/{id}")
