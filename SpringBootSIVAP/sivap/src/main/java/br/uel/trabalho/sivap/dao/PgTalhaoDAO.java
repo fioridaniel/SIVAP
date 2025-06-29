@@ -64,6 +64,26 @@ public class PgTalhaoDAO implements TalhaoDAO {
     }
 
     @Override
+    public Talhao buscaPorIdTalhao(int idTalhao) throws SQLException, IOException, ClassNotFoundException {
+        String sql = "SELECT * FROM talhao WHERE id_talhao = ?";
+        Talhao talhao = null;
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setInt(1, idTalhao);
+            try (ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) {
+                    talhao = new Talhao(
+                        rs.getInt("id_propriedade"),
+                        rs.getInt("id_talhao"),
+                        rs.getBigDecimal("area")
+                    );
+                }
+            }
+        }
+        return talhao;
+    }
+
+    @Override
     public List<Talhao> listarTodos() throws SQLException, IOException, ClassNotFoundException {
         String sql = "SELECT * FROM talhao ORDER BY id_talhao";
         List<Talhao> lista = new ArrayList<>();

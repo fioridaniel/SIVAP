@@ -22,6 +22,13 @@ public interface TalhaoDAO {
     Talhao buscaPorId(int idPropriedade, int idTalhao) throws SQLException, IOException, ClassNotFoundException;
 
     /**
+     * Busca um talhão pelo id do talhão.
+     * @param idTalhao id do talhão
+     * @return Objeto da classe Talhao encontrado, ou null caso não exista
+     */
+    Talhao buscaPorIdTalhao(int idTalhao) throws SQLException, IOException, ClassNotFoundException;
+
+    /**
      * Lista todos os talhões cadastrados.
      * @return Uma lista de todos os objetos Talhao.
      */

@@ -2,6 +2,8 @@ import { Routes, Route } from "react-router-dom";
 import Login from "./screens/Login";
 import PropriedadesUsuario from "./screens/PropriedadesUsuario";
 import Talhao from './screens/Talhao';
+import TalhaoDetalhes from './screens/TalhaoDetalhes';
+import AdicionarSafra from './screens/AdicionarSafra';
 import VariedadeCultura from './screens/VariedadeCultura';
 import Cultura from './screens/Cultura';
 import Safra from './screens/Safra';
@@ -15,6 +17,8 @@ export default function AppRoutes() {
       <Route path="/login" element={<Login />} />
       <Route path="/propriedades" element={<PropriedadesUsuario />} />
       <Route path="/talhoes/:idPropriedade" element={<Talhao />} />
+      <Route path="/talhao-detalhes/:idTalhao" element={<TalhaoDetalhes />} />
+      <Route path="/adicionar-safra/:idTalhao" element={<AdicionarSafra />} />
       <Route path="/variedade" element={<VariedadeCultura />} />
       <Route path="/cultura" element={<Cultura />} />
       <Route path="/safra" element={<Safra />} />

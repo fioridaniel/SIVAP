@@ -1,6 +1,8 @@
 package br.uel.trabalho.sivap.dao;
 
 import br.uel.trabalho.sivap.model.Safra;
+import br.uel.trabalho.sivap.model.SafraComCondicoes;
+import br.uel.trabalho.sivap.model.CondicaoClimatica;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -79,6 +81,90 @@ public class PgSafraDAO implements SafraDAO {
                     rs.getBigDecimal("producao")
                 );
                 lista.add(safra);
+            }
+        }
+        return lista;
+    }
+
+    @Override
+    public List<Safra> listarPorTalhao(int idTalhao) throws SQLException, IOException, ClassNotFoundException {
+        String sql = "SELECT * FROM safra WHERE id_talhao = ? ORDER BY id_safra";
+        List<Safra> lista = new ArrayList<>();
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setInt(1, idTalhao);
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    Safra safra = new Safra(
+                        rs.getInt("id_safra"),
+                        rs.getInt("id_propriedade"),
+                        rs.getInt("id_talhao"),
+                        rs.getInt("id_variedade_cultura"),
+                        rs.getDate("dt_plantio"),
+                        rs.getDate("dt_colheita"),
+                        rs.getBigDecimal("producao")
+                    );
+                    lista.add(safra);
+                }
+            }
+        }
+        return lista;
+    }
+
+    @Override
+    public List<SafraComCondicoes> listarPorTalhaoComCondicoes(int idTalhao) throws SQLException, IOException, ClassNotFoundException {
+        String sql = "SELECT s.*, cc.id_condicao_climatica, cc.precipitacao_mm, cc.distribuicao_chuva_nota, " +
+                    "cc.velocidade_max_vento_kmh, cc.temperatura_media_c, cc.observacoes " +
+                    "FROM safra s " +
+                    "LEFT JOIN condicao_climatica cc ON s.id_safra = cc.id_safra " +
+                    "WHERE s.id_talhao = ? " +
+                    "ORDER BY s.id_safra";
+        
+        List<SafraComCondicoes> lista = new ArrayList<>();
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setInt(1, idTalhao);
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    // Criar objeto Safra
+                    Safra safra = new Safra(
+                        rs.getInt("id_safra"),
+                        rs.getInt("id_propriedade"),
+                        rs.getInt("id_talhao"),
+                        rs.getInt("id_variedade_cultura"),
+                        rs.getDate("dt_plantio"),
+                        rs.getDate("dt_colheita"),
+                        rs.getBigDecimal("producao")
+                    );
+                    
+                    // Criar objeto CondicaoClimatica (pode ser null se não existir)
+                    CondicaoClimatica condicaoClimatica = null;
+                    if (rs.getObject("id_condicao_climatica") != null) {
+                        condicaoClimatica = new CondicaoClimatica(
+                            rs.getInt("id_condicao_climatica"),
+                            rs.getInt("id_safra"),
+                            rs.getBigDecimal("precipitacao_mm"),
+                            rs.getShort("distribuicao_chuva_nota"),
+                            rs.getBigDecimal("velocidade_max_vento_kmh"),
+                            rs.getBigDecimal("temperatura_media_c"),
+                            rs.getString("observacoes")
+                        );
+                    }
+                    
+                    // Criar objeto SafraComCondicoes
+                    SafraComCondicoes safraComCondicoes = new SafraComCondicoes(
+                        safra.getId_safra(),
+                        safra.getId_propriedade(),
+                        safra.getId_talhao(),
+                        safra.getId_variedade_cultura(),
+                        safra.getDt_plantio(),
+                        safra.getDt_colheita(),
+                        safra.getProducao(),
+                        condicaoClimatica
+                    );
+                    
+                    lista.add(safraComCondicoes);
+                }
             }
         }
         return lista;

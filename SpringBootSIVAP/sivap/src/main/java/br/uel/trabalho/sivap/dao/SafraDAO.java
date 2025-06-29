@@ -1,6 +1,7 @@
 package br.uel.trabalho.sivap.dao;
 
 import br.uel.trabalho.sivap.model.Safra;
+import br.uel.trabalho.sivap.model.SafraComCondicoes;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -25,6 +26,20 @@ public interface SafraDAO {
      * @return Uma lista de todos os objetos Safra.
      */
     List<Safra> listarTodos() throws SQLException, IOException, ClassNotFoundException;
+
+    /**
+     * Lista todas as safras de um talhão específico.
+     * @param idTalhao id do talhão
+     * @return Uma lista de todos os objetos Safra do talhão.
+     */
+    List<Safra> listarPorTalhao(int idTalhao) throws SQLException, IOException, ClassNotFoundException;
+
+    /**
+     * Lista todas as safras de um talhão específico com suas condições climáticas.
+     * @param idTalhao id do talhão
+     * @return Uma lista de todos os objetos SafraComCondicoes do talhão com condições climáticas.
+     */
+    List<SafraComCondicoes> listarPorTalhaoComCondicoes(int idTalhao) throws SQLException, IOException, ClassNotFoundException;
 
     /**
      * Atualiza os dados de uma safra existente no banco.

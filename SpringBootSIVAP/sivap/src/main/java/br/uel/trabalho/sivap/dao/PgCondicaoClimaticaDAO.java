@@ -85,6 +85,58 @@ public class PgCondicaoClimaticaDAO implements CondicaoClimaticaDAO {
     }
 
     @Override
+    public List<CondicaoClimatica> listarPorTalhao(int idTalhao) throws SQLException, IOException, ClassNotFoundException {
+        String sql = "SELECT cc.* FROM condicao_climatica cc " +
+                    "INNER JOIN safra s ON cc.id_safra = s.id_safra " +
+                    "WHERE s.id_talhao = ? " +
+                    "ORDER BY cc.id_condicao_climatica";
+        List<CondicaoClimatica> lista = new ArrayList<>();
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setInt(1, idTalhao);
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    CondicaoClimatica condicao = new CondicaoClimatica(
+                        rs.getInt("id_condicao_climatica"),
+                        rs.getInt("id_safra"),
+                        rs.getBigDecimal("precipitacao_mm"),
+                        rs.getShort("distribuicao_chuva_nota"),
+                        rs.getBigDecimal("velocidade_max_vento_kmh"),
+                        rs.getBigDecimal("temperatura_media_c"),
+                        rs.getString("observacoes")
+                    );
+                    lista.add(condicao);
+                }
+            }
+        }
+        return lista;
+    }
+
+    @Override
+    public CondicaoClimatica buscarPorSafra(int idSafra) throws SQLException, IOException, ClassNotFoundException {
+        String sql = "SELECT * FROM condicao_climatica WHERE id_safra = ?";
+        CondicaoClimatica condicao = null;
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setInt(1, idSafra);
+            try (ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) {
+                    condicao = new CondicaoClimatica(
+                        rs.getInt("id_condicao_climatica"),
+                        rs.getInt("id_safra"),
+                        rs.getBigDecimal("precipitacao_mm"),
+                        rs.getShort("distribuicao_chuva_nota"),
+                        rs.getBigDecimal("velocidade_max_vento_kmh"),
+                        rs.getBigDecimal("temperatura_media_c"),
+                        rs.getString("observacoes")
+                    );
+                }
+            }
+        }
+        return condicao;
+    }
+
+    @Override
     public void atualizar(CondicaoClimatica condicao) throws SQLException, IOException, ClassNotFoundException {
         String sql = "UPDATE condicao_climatica SET id_safra = ?, precipitacao_mm = ?, distribuicao_chuva_nota = ?, velocidade_max_vento_kmh = ?, temperatura_media_c = ?, observacoes = ? WHERE id_condicao_climatica = ?";
         try (Connection conn = dataSource.getConnection();

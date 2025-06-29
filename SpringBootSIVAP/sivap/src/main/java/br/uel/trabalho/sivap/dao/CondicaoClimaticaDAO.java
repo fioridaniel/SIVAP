@@ -27,6 +27,20 @@ public interface CondicaoClimaticaDAO {
     List<CondicaoClimatica> listarTodos() throws SQLException, IOException, ClassNotFoundException;
 
     /**
+     * Lista todas as condições climáticas de um talhão específico.
+     * @param idTalhao id do talhão
+     * @return Uma lista de todos os objetos CondicaoClimatica do talhão.
+     */
+    List<CondicaoClimatica> listarPorTalhao(int idTalhao) throws SQLException, IOException, ClassNotFoundException;
+
+    /**
+     * Busca a condição climática de uma safra específica.
+     * @param idSafra id da safra
+     * @return Objeto CondicaoClimatica da safra, ou null caso não exista
+     */
+    CondicaoClimatica buscarPorSafra(int idSafra) throws SQLException, IOException, ClassNotFoundException;
+
+    /**
      * Atualiza os dados de uma condição climática existente no banco.
      * @param condicao uma instância da classe CondicaoClimatica com os dados atualizados.
      */
