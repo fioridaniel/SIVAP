@@ -1,24 +1,23 @@
 import './App.css';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Talhao from './screens/Talhao';
+import VariedadeCultura from './screens/VariedadeCultura';
+import Cultura from './screens/Cultura';
+import Safra from './screens/Safra';
+import CondicaoClimatica from './screens/CondicaoClimatica';
+import Propriedade from './screens/Propriedade';
 
 function App() {
-  const [dado, setDado] = useState('');
-  
-  useEffect(() => {
-    /* os then sao encadeados. a ordem importa */
-      fetch('http://localhost:8080/produtores')
-      .then(response => response.json())
-      .then(data => { 
-        console.log(data[0].cpf);
-        setDado(data[0].cpf); 
-      })
-      .catch(error => console.error('Erro ao buscar mensagem:', error));
-  }, []);
-
   return (
-    <h1>Mensagem do server: {dado}</h1>
-  )
+      <Routes>
+        <Route path="/talhao" element={<Talhao />} />
+        <Route path="/variedade" element={<VariedadeCultura />} />
+        <Route path="/cultura" element={<Cultura />} />
+        <Route path="/safra" element={<Safra />} />
+        <Route path="/condicao-climatica" element={<CondicaoClimatica />} />
+        <Route path="/propriedade" element={<Propriedade/>} />
+      </Routes>
+  );
 }
 
 export default App;
