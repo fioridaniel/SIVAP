@@ -2,14 +2,21 @@ package br.uel.trabalho.sivap.controller;
 
 import br.uel.trabalho.sivap.dao.PgProdutorRuralDAO;
 import br.uel.trabalho.sivap.model.ProdutorRural;
+import br.uel.trabalho.sivap.model.Propriedade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
-@RestController
+//@CrossOrigin(origins = "http://localhost:3000") /* importante */
+@RestController /* faz com que os dados sejam retornados em json */
 @RequestMapping("/produtores")
 public class ProdutorRuralController {
 
@@ -19,6 +26,12 @@ public class ProdutorRuralController {
     @GetMapping
     public List<ProdutorRural> listarTodos() throws SQLException, IOException, ClassNotFoundException {
         return produtorRuralDAO.listarTodos();
+    }
+
+    /* esse metodo aqui vai ser utilizado na pagina inicial de determinado produtor */
+    @GetMapping("/produtor-propriedades/{cpf}")
+    public List<Propriedade> buscarPropriedadesDoProdutor(@PathVariable String cpf) throws SQLException, IOException, ClassNotFoundException {
+       return produtorRuralDAO.buscarPropriedadesDoProdutor(cpf);
     }
 
     @GetMapping("/{cpf}")

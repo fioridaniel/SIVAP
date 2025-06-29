@@ -28,6 +28,13 @@ public interface TalhaoDAO {
     List<Talhao> listarTodos() throws SQLException, IOException, ClassNotFoundException;
 
     /**
+     * Lista todos os talhões de uma propriedade específica.
+     * @param idPropriedade id da propriedade
+     * @return Uma lista de todos os objetos Talhao da propriedade.
+     */
+    List<Talhao> listarPorPropriedade(int idPropriedade) throws SQLException, IOException, ClassNotFoundException;
+
+    /**
      * Atualiza os dados de um talhão existente no banco.
      * @param talhao uma instância da classe Talhao com os dados atualizados.
      */

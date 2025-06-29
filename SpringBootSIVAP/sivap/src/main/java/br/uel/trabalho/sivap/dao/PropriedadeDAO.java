@@ -59,4 +59,11 @@ public interface PropriedadeDAO {
      * @return Lista de produtores associados à propriedade.
      */
     List<ProdutorRural> buscarProdutoresDaPropriedade(int idPropriedade) throws SQLException, IOException, ClassNotFoundException;
+
+    /**
+     * Busca todas as propriedades associadas a um produtor rural.
+     * @param cpfProdutor O CPF do produtor.
+     * @return Lista de propriedades associadas ao produtor.
+     */
+    List<Propriedade> buscarPropriedadesDoProdutor(String cpfProdutor) throws SQLException, IOException, ClassNotFoundException;
 }
