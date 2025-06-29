@@ -84,6 +84,15 @@ const Talhao = () => {
     navigate('/propriedades', { state: { cpfUsuario: cpfUsuario } });
   };
 
+  const handleViewDetails = (talhao) => {
+    navigate(`/talhao-detalhes/${talhao.id_talhao}`, { 
+      state: { 
+        propriedade: propriedade, 
+        cpfUsuario: cpfUsuario 
+      } 
+    });
+  };
+
   if (isLoading) {
     return (
       <div className="talhao-container">
@@ -190,7 +199,12 @@ const Talhao = () => {
                     </div>
                   </div>
                   <div className="talhao-list-actions">
-                    <button className="view-details-btn">Ver Detalhes</button>
+                    <button 
+                      className="view-details-btn"
+                      onClick={() => handleViewDetails(talhao)}
+                    >
+                      Ver Detalhes
+                    </button>
                   </div>
                 </div>
               ))}

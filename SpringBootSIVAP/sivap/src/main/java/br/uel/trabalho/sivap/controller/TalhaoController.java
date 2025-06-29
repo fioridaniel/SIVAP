@@ -31,6 +31,11 @@ public class TalhaoController {
         return talhaoDAO.buscaPorId(idPropriedade, idTalhao);
     }
 
+    @GetMapping("/{idTalhao}")
+    public Talhao buscarPorIdTalhao(@PathVariable int idTalhao) throws SQLException, IOException, ClassNotFoundException {
+        return talhaoDAO.buscaPorIdTalhao(idTalhao);
+    }
+
     @PostMapping
     public void criar(@RequestBody Talhao talhao) throws SQLException, IOException, ClassNotFoundException {
         talhaoDAO.inserir(talhao);
