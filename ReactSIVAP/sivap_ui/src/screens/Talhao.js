@@ -178,10 +178,10 @@ const Talhao = () => {
           ) : (
             <div className="talhoes-list-container">
               {talhoes.map((talhao) => (
-                <div key={talhao.id} className="talhao-list-item">
+                <div key={talhao.id_talhao} className="talhao-list-item">
                   <div className="talhao-list-icon">🌾</div>
                   <div className="talhao-list-info">
-                    <h3>Talhão #{talhao.id}</h3>
+                    <h3>Talhão #{talhao.id_talhao}</h3>
                     <div className="talhao-list-details">
                       <span className="detail-item">
                         <span className="detail-label">Área:</span> 
