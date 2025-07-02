@@ -2,6 +2,7 @@ package br.uel.trabalho.sivap.controller;
 
 import br.uel.trabalho.sivap.dao.PgSafraDAO;
 import br.uel.trabalho.sivap.model.Safra;
+import br.uel.trabalho.sivap.model.SafraComCondicoes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +25,16 @@ public class SafraController {
     @GetMapping("/{id}")
     public Safra buscarPorId(@PathVariable int id) throws SQLException, IOException, ClassNotFoundException {
         return safraDAO.buscaPorId(id);
+    }
+
+    @GetMapping("/talhao/{idTalhao}")
+    public List<Safra> listarPorTalhao(@PathVariable int idTalhao) throws SQLException, IOException, ClassNotFoundException {
+        return safraDAO.listarPorTalhao(idTalhao);
+    }
+
+    @GetMapping("/talhao/{idTalhao}/com-condicoes")
+    public List<SafraComCondicoes> listarPorTalhaoComCondicoes(@PathVariable int idTalhao) throws SQLException, IOException, ClassNotFoundException {
+        return safraDAO.listarPorTalhaoComCondicoes(idTalhao);
     }
 
     @PostMapping

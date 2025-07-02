@@ -1,40 +1,135 @@
-.talhao-container {
-  display: flex;
-  min-height: 100vh;
-  background: #f4f1ee;
-  position: relative;
-}
+/* Importação da fonte */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-.talhao-left {
-  flex: 1.0;
+.talhao-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #fffbe6 0%, #fffde7 100%);
+  padding: 20px;
+  font-family: 'Poppins', sans-serif;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  padding: 60px;
-  background: #fffbe6;
-  border-radius: 20px 0 0 20px;
-  box-shadow: 0 4px 24px rgba(34, 139, 34, 0.08);
-  position: relative;
-  z-index: 2;
 }
 
-.talhao-logo {
-  font-weight: bold;
+.talhao-header {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
+  padding: 25px;
+  margin-bottom: 30px;
+  box-shadow: 0 8px 32px rgba(56, 142, 60, 0.1);
+  border: 1px solid rgba(56, 142, 60, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.back-btn {
+  background: #6d4c41;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+}
+
+.back-btn:hover {
+  background: #4e342e;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(78, 52, 46, 0.3);
+}
+
+.header-content h1 {
   color: #388e3c;
-  margin-bottom: 32px;
-  font-size: 1.3rem;
+  margin: 0 0 5px 0;
+  font-size: 2.2rem;
+  font-weight: 600;
 }
 
-.talhao-left h1 {
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 8px;
-  color: #4e342e;
-}
-
-.talhao-left p {
+.header-subtitle {
   color: #6d4c41;
-  margin-bottom: 32px;
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+.propriedade-info {
+  color: #4e342e;
+  background: rgba(139, 195, 74, 0.1);
+  padding: 15px;
+  border-radius: 15px;
+  border: 1px solid rgba(139, 195, 74, 0.2);
+}
+
+.propriedade-info h2 {
+  margin: 0 0 5px 0;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #388e3c;
+}
+
+.propriedade-info p {
+  margin: 0;
+  font-size: 1rem;
+  color: #6d4c41;
+}
+
+.talhao-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.talhao-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.primary-btn, .add-talhao-btn {
+  background: linear-gradient(135deg, #388e3c, #2e7d32);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(56, 142, 60, 0.3);
+  font-family: 'Poppins', sans-serif;
+}
+
+.primary-btn:hover, .add-talhao-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(56, 142, 60, 0.4);
+  background: linear-gradient(135deg, #2e7d32, #1b5e20);
+}
+
+.talhao-form-container {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 8px 32px rgba(56, 142, 60, 0.1);
+  border: 1px solid rgba(56, 142, 60, 0.1);
+}
+
+.talhao-form-container h3 {
+  color: #388e3c;
+  margin: 0 0 20px 0;
+  font-size: 1.5rem;
+  font-weight: 600;
 }
 
 .talhao-form {
@@ -48,109 +143,930 @@
   flex-direction: column;
   gap: 8px;
   color: #4e342e;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 1rem;
 }
 
 .talhao-form input {
-  width: 100%;
-  padding: 14px;
-  border: 1px solid #c8bfae;
-  border-radius: 8px;
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
   font-size: 1rem;
-  background: #f9fbe7;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: all 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+  background: rgba(255, 255, 255, 0.9);
 }
 
 .talhao-form input:focus {
   outline: none;
   border-color: #8bc34a;
   box-shadow: 0 0 0 3px rgba(139, 195, 74, 0.1);
+  background: white;
 }
 
-.talhao-form button {
-  width: 100%;
-  padding: 14px;
-  background: #8bc34a;
-  color: #fff;
+.talhao-form input::placeholder {
+  color: #c8bfae;
+}
+
+.form-buttons {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.form-buttons button {
+  flex: 1;
+  padding: 12px;
   border: none;
-  border-radius: 8px;
-  font-size: 1.1rem;
+  border-radius: 12px;
+  font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
-  margin-top: 8px;
-  transition: background 0.2s, transform 0.1s;
+  transition: all 0.3s ease;
+  font-family: 'Poppins', sans-serif;
 }
 
-.talhao-form button:hover {
-  background: #689f38;
+.secondary-btn {
+  background: #f5f5f5;
+  color: #6d4c41;
+  border: 2px solid #e0e0e0;
+}
+
+.secondary-btn:hover {
+  background: #e0e0e0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.talhoes-list {
+  margin-top: 20px;
+}
+
+.loading, .error, .no-talhoes {
+  text-align: center;
+  color: #4e342e;
+  font-size: 1.1rem;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(56, 142, 60, 0.1);
+  border: 1px solid rgba(56, 142, 60, 0.1);
+}
+
+.loading-icon, .error-icon, .no-talhoes-icon {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.loading p, .error p, .no-talhoes p {
+  margin: 10px 0;
+}
+
+.error {
+  color: #d32f2f;
+}
+
+.error button {
+  background: #388e3c;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin: 10px 5px;
+  transition: all 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+}
+
+.error button:hover {
+  background: #2e7d32;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(56, 142, 60, 0.3);
+}
+
+.no-talhoes h3 {
+  color: #388e3c;
+  margin: 0 0 15px 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.no-talhoes button {
+  background: linear-gradient(135deg, #388e3c, #2e7d32);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-top: 15px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(56, 142, 60, 0.3);
+  font-family: 'Poppins', sans-serif;
+}
+
+.no-talhoes button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(56, 142, 60, 0.4);
+  background: linear-gradient(135deg, #2e7d32, #1b5e20);
+}
+
+.talhoes-list-container {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 8px 32px rgba(56, 142, 60, 0.1);
+  border: 1px solid rgba(56, 142, 60, 0.1);
+}
+
+.talhao-list-item {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(139, 195, 74, 0.2);
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 15px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.talhao-list-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(56, 142, 60, 0.15);
+  border-color: rgba(139, 195, 74, 0.4);
+}
+
+.talhao-list-icon {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.talhao-list-info {
+  flex: 1;
+}
+
+.talhao-list-info h3 {
+  color: #388e3c;
+  margin: 0 0 10px 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.talhao-list-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 120px;
+}
+
+.detail-label {
+  font-size: 0.85rem;
+  color: #6d4c41;
+  font-weight: 500;
+}
+
+.detail-value {
+  font-size: 1rem;
+  color: #4e342e;
+  font-weight: 600;
+}
+
+.talhao-list-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  align-items: center;
+}
+
+.view-details-btn {
+  background: linear-gradient(135deg, #388e3c, #2e7d32);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+}
+
+.view-details-btn:hover {
   transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(56, 142, 60, 0.3);
+  background: linear-gradient(135deg, #2e7d32, #1b5e20);
 }
 
-.talhao-form button:active {
+.delete-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  color: #d32f2f;
+  opacity: 0.7;
+}
+
+.delete-btn:hover {
+  background: rgba(211, 47, 47, 0.1);
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.talhoes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.talhao-card {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 8px 32px rgba(56, 142, 60, 0.1);
+  border: 1px solid rgba(56, 142, 60, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.talhao-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(56, 142, 60, 0.2);
+}
+
+.talhao-icon {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+}
+
+.talhao-card h3 {
+  color: #388e3c;
+  margin: 0 0 10px 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.talhao-card p {
+  color: #6d4c41;
+  margin: 5px 0;
+  font-size: 0.95rem;
+}
+
+.talhao-actions-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+@media (max-width: 768px) {
+  .talhao-container {
+    padding: 15px;
+  }
+
+  .talhao-header {
+    padding: 20px;
+  }
+
+  .header-content h1 {
+    font-size: 1.8rem;
+  }
+
+  .talhao-list-item {
+    padding: 15px;
+  }
+
+  .talhao-list-details {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .detail-item {
+    min-width: auto;
+  }
+
+  .talhoes-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-buttons {
+    flex-direction: column;
+  }
+}
+
+.talhao-details-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  flex: 1;
+}
+
+.talhao-main-info {
+  flex-shrink: 0;
+}
+
+.talhao-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 8px 32px rgba(56, 142, 60, 0.1);
+  border: 1px solid rgba(56, 142, 60, 0.1);
+  transition: all 0.3s ease;
+}
+
+.talhao-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(56, 142, 60, 0.15);
+}
+
+.talhao-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid rgba(139, 195, 74, 0.2);
+}
+
+.talhao-card-header h2 {
+  color: #388e3c;
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.talhao-icon {
+  font-size: 2.5rem;
+}
+
+.talhao-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(139, 195, 74, 0.1);
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-label {
+  color: #6d4c41;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.detail-value {
+  color: #4e342e;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.talhao-sections {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.section-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 8px 32px rgba(56, 142, 60, 0.1);
+  border: 1px solid rgba(56, 142, 60, 0.1);
+  transition: all 0.3s ease;
+  flex: 1;
+}
+
+.section-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(56, 142, 60, 0.15);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid rgba(139, 195, 74, 0.2);
+}
+
+.section-card h3 {
+  color: #388e3c;
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
+.safras-count {
+  background: rgba(139, 195, 74, 0.1);
+  padding: 8px 15px;
+  border-radius: 20px;
+  border: 1px solid rgba(139, 195, 74, 0.2);
+}
+
+.safras-count span {
+  color: #388e3c;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.no-data {
+  text-align: center;
+  color: #6d4c41;
+  padding: 40px;
+  background: rgba(139, 195, 74, 0.05);
+  border-radius: 15px;
+  border: 2px dashed rgba(139, 195, 74, 0.3);
+}
+
+.no-data p {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.safras-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.safras-list, .condicoes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.safra-item, .condicao-item {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(139, 195, 74, 0.2);
+  border-radius: 15px;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+.safra-item:hover, .condicao-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(56, 142, 60, 0.15);
+  border-color: rgba(139, 195, 74, 0.4);
+}
+
+.safra-info h4, .condicao-info h4 {
+  color: #388e3c;
+  margin: 0 0 15px 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+  padding-bottom: 10px;
+  border-bottom: 2px solid rgba(139, 195, 74, 0.2);
+}
+
+.safra-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid rgba(139, 195, 74, 0.2);
+}
+
+.safra-header h4 {
+  margin: 0;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.safra-info p, .condicao-info p {
+  color: #6d4c41;
+  margin: 8px 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .talhao-sections {
+    gap: 15px;
+  }
+
+  .talhao-card {
+    padding: 20px;
+  }
+
+  .talhao-card-header {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .detail-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .section-card {
+    padding: 20px;
+  }
+
+  .section-header {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+}
+
+.add-safra-btn {
+  background: linear-gradient(135deg, #388e3c, #2e7d32);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(56, 142, 60, 0.3);
+  font-family: 'Poppins', sans-serif;
+  white-space: nowrap;
+}
+
+.add-safra-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(56, 142, 60, 0.4);
+  background: linear-gradient(135deg, #2e7d32, #1b5e20);
+}
+
+.add-safra-btn:active {
   transform: translateY(0);
 }
 
-.talhao-right {
-  flex: 1.3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #a5d6a7 0%, #fffde7 100%);
-  border-radius: 0 20px 20px 0;
-  position: relative;
-  z-index: 1;
-  overflow: hidden;
+.form-container {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 8px 32px rgba(56, 142, 60, 0.1);
+  border: 1px solid rgba(56, 142, 60, 0.1);
 }
 
-.talhao-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 1;
+.form-sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 25px;
+  margin-bottom: 25px;
 }
 
-.placeholder-img {
-  width: 340px;
-  height: 380px;
-  background: #e0e0e0;
-  border: 2px dashed #8bc34a;
-  border-radius: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.form-section {
+  background: rgba(139, 195, 74, 0.05);
+  border-radius: 15px;
+  padding: 20px;
+  border: 1px solid rgba(139, 195, 74, 0.1);
+}
+
+.form-section h3 {
   color: #388e3c;
+  margin: 0 0 20px 0;
   font-size: 1.3rem;
-  text-align: center;
-  font-weight: 500;
-  box-shadow: 0 2px 12px rgba(34, 139, 34, 0.07);
+  font-weight: 600;
+  padding-bottom: 10px;
+  border-bottom: 2px solid rgba(139, 195, 74, 0.2);
 }
 
-/* Responsividade */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  color: #4e342e;
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 1rem;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #8bc34a;
+  box-shadow: 0 0 0 3px rgba(139, 195, 74, 0.1);
+  background: white;
+}
+
+.form-group textarea {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+  background: rgba(255, 255, 255, 0.9);
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
+  padding-top: 20px;
+  border-top: 2px solid rgba(139, 195, 74, 0.1);
+}
+
+.cancel-btn {
+  background: #f5f5f5;
+  color: #6d4c41;
+  border: 2px solid #e0e0e0;
+  padding: 12px 24px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+}
+
+.cancel-btn:hover {
+  background: #e0e0e0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.submit-btn {
+  background: linear-gradient(135deg, #388e3c, #2e7d32);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(56, 142, 60, 0.3);
+  font-family: 'Poppins', sans-serif;
+}
+
+.submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(56, 142, 60, 0.4);
+  background: linear-gradient(135deg, #2e7d32, #1b5e20);
+}
+
+.submit-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.error-message,
+.success-message {
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.error-message {
+  background: rgba(244, 67, 54, 0.1);
+  color: #d32f2f;
+  border: 1px solid rgba(244, 67, 54, 0.2);
+}
+
+.success-message {
+  background: rgba(76, 175, 80, 0.1);
+  color: #388e3c;
+  border: 1px solid rgba(76, 175, 80, 0.2);
+}
+
+.error-icon,
+.success-icon {
+  margin-right: 8px;
+}
+
 @media (max-width: 768px) {
-  .talhao-container {
+  .form-sections {
+    grid-template-columns: 1fr;
+  }
+
+  .form-actions {
     flex-direction: column;
   }
-  
-  .talhao-left {
-    border-radius: 20px 20px 0 0;
-    padding: 40px 30px;
+
+  .add-safra-btn {
+    font-size: 0.85rem;
+    padding: 10px 20px;
   }
-  
-  .talhao-right {
-    border-radius: 0 0 20px 20px;
-    min-height: 300px;
+
+  .talhao-header {
+    gap: 15px;
   }
-  
-  .talhao-left h1 {
-    font-size: 2rem;
+}
+
+.safra-details {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.safra-basic-info {
+  background: rgba(139, 195, 74, 0.05);
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid rgba(139, 195, 74, 0.1);
+}
+
+.safra-basic-info p {
+  margin: 8px 0;
+  color: #4e342e;
+  font-size: 0.95rem;
+}
+
+.condicao-climatica-info {
+  background: rgba(33, 150, 243, 0.05);
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid rgba(33, 150, 243, 0.1);
+}
+
+.condicao-climatica-info h5 {
+  color: #1976d2;
+  margin: 0 0 15px 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(33, 150, 243, 0.2);
+}
+
+.condicao-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.condicao-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 8px;
+  border: 1px solid rgba(33, 150, 243, 0.1);
+}
+
+.condicao-label {
+  color: #1976d2;
+  font-weight: 600;
+  font-size: 0.9rem;
+  flex: 1;
+}
+
+.condicao-value {
+  color: #4e342e;
+  font-weight: 500;
+  font-size: 0.95rem;
+  text-align: right;
+}
+
+.condicao-observacoes {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(33, 150, 243, 0.2);
+}
+
+.condicao-observacoes .condicao-label {
+  display: block;
+  margin-bottom: 8px;
+  color: #1976d2;
+  font-weight: 600;
+}
+
+.condicao-observacoes p {
+  color: #4e342e;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(33, 150, 243, 0.1);
+}
+
+.no-condicao {
+  background: rgba(255, 193, 7, 0.1);
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 193, 7, 0.2);
+  text-align: center;
+}
+
+.no-condicao p {
+  margin: 0;
+  color: #f57c00;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+/* Novos estilos para paginação */
+.load-more-container {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.load-more-btn {
+  background: linear-gradient(135deg, #388e3c, #2e7d32);
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(56, 142, 60, 0.3);
+  font-family: 'Poppins', sans-serif;
+}
+
+.load-more-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(56, 142, 60, 0.4);
+  background: linear-gradient(135deg, #2e7d32, #1b5e20);
+}
+
+.all-safras-loaded {
+  text-align: center;
+  padding: 20px;
+  background: rgba(76, 175, 80, 0.1);
+  border-radius: 15px;
+  border: 1px solid rgba(76, 175, 80, 0.2);
+  margin-top: 10px;
+}
+
+.all-safras-loaded p {
+  margin: 0;
+  color: #388e3c;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+  .condicao-grid {
+    grid-template-columns: 1fr;
   }
-  
-  .placeholder-img {
-    width: 280px;
-    height: 200px;
+
+  .safra-basic-info,
+  .condicao-climatica-info {
+    padding: 12px;
+  }
+
+  .condicao-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .condicao-label {
+    font-size: 0.85rem;
+  }
+
+  .condicao-value {
+    font-size: 0.9rem;
+    text-align: left;
   }
 }

@@ -26,6 +26,16 @@ public class CondicaoClimaticaController {
         return condicaoClimaticaDAO.buscaPorId(id);
     }
 
+    @GetMapping("/talhao/{idTalhao}")
+    public List<CondicaoClimatica> listarPorTalhao(@PathVariable int idTalhao) throws SQLException, IOException, ClassNotFoundException {
+        return condicaoClimaticaDAO.listarPorTalhao(idTalhao);
+    }
+
+    @GetMapping("/safra/{idSafra}")
+    public CondicaoClimatica buscarPorSafra(@PathVariable int idSafra) throws SQLException, IOException, ClassNotFoundException {
+        return condicaoClimaticaDAO.buscarPorSafra(idSafra);
+    }
+
     @PostMapping
     public void criar(@RequestBody CondicaoClimatica condicao) throws SQLException, IOException, ClassNotFoundException {
         condicaoClimaticaDAO.inserir(condicao);
