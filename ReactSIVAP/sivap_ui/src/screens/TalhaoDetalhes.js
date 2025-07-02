@@ -63,6 +63,39 @@ const TalhaoDetalhes = () => {
     }
   };
 
+  const handleDeleteSafra = async (safra, event) => {
+    event.stopPropagation(); // Evita que o clique propague
+    
+    const confirmacao = window.confirm(
+      `Tem certeza que deseja deletar a Safra #${safra.id_safra}?\n\n` +
+      `Esta ação irá deletar:\n` +
+      `• A safra e todos os seus dados\n` +
+      `• As condições climáticas associadas (se houver)\n\n` +
+      `Esta ação não pode ser desfeita!`
+    );
+
+    if (!confirmacao) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:8080/safras/${safra.id_safra}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        alert('Safra deletada com sucesso!');
+        // Recarregar os detalhes do talhão
+        fetchTalhaoDetalhes();
+      } else {
+        alert('Erro ao deletar safra. Verifique se não há dependências.');
+      }
+    } catch (error) {
+      console.error('Erro ao deletar safra:', error);
+      alert('Erro de conexão com o servidor');
+    }
+  };
+
   const carregarMaisSafras = () => {
     const novasSafrasVisiveis = Math.min(safrasVisiveis + 10, safrasComCondicoes.length);
     setSafrasVisiveis(novasSafrasVisiveis);
@@ -192,7 +225,16 @@ const TalhaoDetalhes = () => {
                     {safrasExibidas.map((safra) => (
                       <div key={safra.id_safra} className="safra-item">
                         <div className="safra-info">
-                          <h4>Safra #{safra.id_safra}</h4>
+                          <div className="safra-header">
+                            <h4>Safra #{safra.id_safra}</h4>
+                            <button 
+                              className="delete-btn"
+                              onClick={(e) => handleDeleteSafra(safra, e)}
+                              title="Deletar safra"
+                            >
+                              🗑️
+                            </button>
+                          </div>
                           <div className="safra-details">
                             <div className="safra-basic-info">
                               <p><strong>Data de Plantio:</strong> {new Date(safra.dt_plantio).toLocaleDateString('pt-BR')}</p>

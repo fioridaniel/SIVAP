@@ -344,6 +344,8 @@
 .talhao-list-actions {
   display: flex;
   justify-content: flex-end;
+  gap: 10px;
+  align-items: center;
 }
 
 .view-details-btn {
@@ -363,6 +365,24 @@
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(56, 142, 60, 0.3);
   background: linear-gradient(135deg, #2e7d32, #1b5e20);
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  color: #d32f2f;
+  opacity: 0.7;
+}
+
+.delete-btn:hover {
+  background: rgba(211, 47, 47, 0.1);
+  opacity: 1;
+  transform: scale(1.1);
 }
 
 .talhoes-grid {
@@ -621,6 +641,21 @@
   font-weight: 600;
   padding-bottom: 10px;
   border-bottom: 2px solid rgba(139, 195, 74, 0.2);
+}
+
+.safra-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid rgba(139, 195, 74, 0.2);
+}
+
+.safra-header h4 {
+  margin: 0;
+  border-bottom: none;
+  padding-bottom: 0;
 }
 
 .safra-info p, .condicao-info p {

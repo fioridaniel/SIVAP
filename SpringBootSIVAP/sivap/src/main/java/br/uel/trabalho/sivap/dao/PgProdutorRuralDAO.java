@@ -23,7 +23,7 @@ public class PgProdutorRuralDAO implements ProdutorRuralDAO {
         String sql = "INSERT INTO produtor_rural (cpf, nome, sexo, dt_nasc) VALUES (?, ?, ?, ?);";
 
         try (Connection conn = dataSource.getConnection();
-             PreparedStatement pst = conn.prepareStatement(sql)) {
+            PreparedStatement pst = conn.prepareStatement(sql)) {
 
             pst.setString(1, produtor.getCpf());
             pst.setString(2, produtor.getNome());

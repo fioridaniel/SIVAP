@@ -50,6 +50,40 @@ const PropriedadesUsuario = () => {
     });
   };
 
+  const handleDeletePropriedade = async (propriedade, event) => {
+    event.stopPropagation(); // Evita que o clique propague para o item da lista
+    
+    const confirmacao = window.confirm(
+      `Tem certeza que deseja deletar a propriedade "${propriedade.nome}"?\n\n` +
+      `Esta ação irá deletar:\n` +
+      `• Todos os talhões da propriedade\n` +
+      `• Todas as safras dos talhões\n` +
+      `• Todas as condições climáticas das safras\n\n` +
+      `Esta ação não pode ser desfeita!`
+    );
+
+    if (!confirmacao) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:8080/propriedades/${propriedade.id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        alert('Propriedade deletada com sucesso!');
+        // Recarregar a lista de propriedades
+        fetchPropriedades(cpfUsuario);
+      } else {
+        alert('Erro ao deletar propriedade. Verifique se não há dependências.');
+      }
+    } catch (error) {
+      console.error('Erro ao deletar propriedade:', error);
+      alert('Erro de conexão com o servidor');
+    }
+  };
+
   const handleLogout = () => {
     // Em uma implementação real, limparia o token de autenticação
     navigate('/login');
@@ -130,6 +164,13 @@ const PropriedadesUsuario = () => {
                 </div>
                 <div className="property-list-actions">
                   <span className="view-talhoes">Ver Talhões →</span>
+                  <button 
+                    className="delete-btn"
+                    onClick={(e) => handleDeletePropriedade(propriedade, e)}
+                    title="Deletar propriedade"
+                  >
+                    🗑️
+                  </button>
                 </div>
               </div>
             ))}

@@ -34,13 +34,19 @@ const Talhao = () => {
       if (response.ok) {
         const data = await response.json();
         setTalhoes(data);
-      } else {
+      } 
+    
+      else {
         setError('Erro ao carregar talhões');
       }
-    } catch (error) {
+    } 
+    
+    catch (error) {
       console.error('Erro ao buscar talhões:', error);
       setError('Erro de conexão com o servidor');
-    } finally {
+    } 
+    
+    finally {
       setIsLoading(false);
     }
   };
@@ -80,9 +86,49 @@ const Talhao = () => {
     }
   };
 
+  const handleDeleteTalhao = async (talhao, event) => {
+    event.stopPropagation(); // Evita que o clique propague para o item da lista
+    
+    const confirmacao = window.confirm(
+      `Tem certeza que deseja deletar o Talhão #${talhao.id_talhao}?\n\n` +
+      `Esta ação irá deletar:\n` +
+      `• Todas as safras do talhão\n` +
+      `• Todas as condições climáticas das safras\n\n` +
+      `Esta ação não pode ser desfeita!`
+    );
+
+    if (!confirmacao) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:8080/talhoes/${idPropriedade}/${talhao.id_talhao}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        alert('Talhão deletado com sucesso!');
+        // Recarregar a lista de talhões
+        fetchTalhoes();
+      } else {
+        alert('Erro ao deletar talhão. Verifique se não há dependências.');
+      }
+    } catch (error) {
+      console.error('Erro ao deletar talhão:', error);
+      alert('Erro de conexão com o servidor');
+    }
+  };
+
+  /* campo state no navigate eh usado para passar dados via navegacao */
   const handleBackToProperties = () => {
     navigate('/propriedades', { state: { cpfUsuario: cpfUsuario } });
   };
+
+  /*  const Propriedades = () => {
+        const location = useLocation(); contem a url atual
+        const cpfUsuario = location.state?.cpfUsuario; o "?" evita que seja undefined
+      ...
+      } */
 
   const handleViewDetails = (talhao) => {
     navigate(`/talhao-detalhes/${talhao.id_talhao}`, { 
@@ -127,7 +173,7 @@ const Talhao = () => {
           <h1>🌾 Talhões da Propriedade</h1>
           <p className="header-subtitle">Gerencie os talhões de sua propriedade</p>
         </div>
-        {propriedade && (
+        {propriedade && ( /* so vai renderizar se propriedade nao for undefined (ou null, false etc) */
           <div className="propriedade-info">
             <h2>{propriedade.nome}</h2>
             <p>Área total: {propriedade.area} hectares</p>
@@ -204,6 +250,13 @@ const Talhao = () => {
                       onClick={() => handleViewDetails(talhao)}
                     >
                       Ver Detalhes
+                    </button>
+                    <button 
+                      className="delete-btn"
+                      onClick={(e) => handleDeleteTalhao(talhao, e)}
+                      title="Deletar talhão"
+                    >
+                      🗑️
                     </button>
                   </div>
                 </div>
