@@ -93,7 +93,7 @@ const PropriedadesUsuario = () => {
     return (
       <div className="propriedades-container">
         <div className="loading">
-          <div className="loading-icon">🌱</div>
+          <div className="loading-icon">Carregando...</div>
           <p>Carregando suas propriedades...</p>
         </div>
       </div>
@@ -104,7 +104,7 @@ const PropriedadesUsuario = () => {
     return (
       <div className="propriedades-container">
         <div className="error">
-          <div className="error-icon">⚠️</div>
+          <div className="error-icon">Erro</div>
           <p>{error}</p>
           <button onClick={() => fetchPropriedades(cpfUsuario)}>Tentar novamente</button>
         </div>
@@ -116,7 +116,7 @@ const PropriedadesUsuario = () => {
     <div className="propriedades-container">
       <div className="propriedades-header">
         <div className="header-content">
-          <h1>🌱 Minhas Propriedades</h1>
+          <h1>Minhas Propriedades</h1>
           <p className="header-subtitle">Gerencie suas propriedades rurais</p>
         </div>
         <div className="user-info">
@@ -130,7 +130,7 @@ const PropriedadesUsuario = () => {
       <div className="propriedades-content">
         {propriedades.length === 0 ? (
           <div className="no-properties">
-            <div className="no-properties-icon">🏡</div>
+            <div className="no-properties-icon">Nenhuma propriedade</div>
             <h3>Nenhuma propriedade cadastrada</h3>
             <p>Você ainda não possui propriedades cadastradas.</p>
             <button 
@@ -148,7 +148,7 @@ const PropriedadesUsuario = () => {
                 className="property-list-item"
                 onClick={() => handlePropriedadeClick(propriedade)}
               >
-                <div className="property-list-icon">🏡</div>
+                <div className="property-list-icon">Propriedade</div>
                 <div className="property-list-info">
                   <h3>{propriedade.nome}</h3>
                   <div className="property-list-details">

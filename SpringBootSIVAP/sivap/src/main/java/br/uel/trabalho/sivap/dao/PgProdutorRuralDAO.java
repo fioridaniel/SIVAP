@@ -110,7 +110,7 @@ public class PgProdutorRuralDAO implements ProdutorRuralDAO {
         String sql = "DELETE FROM produtor_rural WHERE cpf = ?;";
 
         try (Connection conn = dataSource.getConnection();
-             PreparedStatement pst = conn.prepareStatement(sql)) {
+            PreparedStatement pst = conn.prepareStatement(sql)) {
 
             pst.setString(1, cpf);
             pst.executeUpdate();

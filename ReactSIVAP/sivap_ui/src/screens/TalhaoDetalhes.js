@@ -118,7 +118,7 @@ const TalhaoDetalhes = () => {
     return (
       <div className="talhao-container">
         <div className="loading">
-          <div className="loading-icon">🌾</div>
+          <div className="loading-icon">Carregando...</div>
           <p>Carregando detalhes do talhão...</p>
         </div>
       </div>
@@ -129,7 +129,7 @@ const TalhaoDetalhes = () => {
     return (
       <div className="talhao-container">
         <div className="error">
-          <div className="error-icon">⚠️</div>
+          <div className="error-icon">Erro</div>
           <p>{error}</p>
           <button onClick={fetchTalhaoDetalhes}>Tentar novamente</button>
           <button onClick={handleBackToTalhoes}>Voltar aos Talhões</button>
@@ -142,7 +142,7 @@ const TalhaoDetalhes = () => {
     return (
       <div className="talhao-container">
         <div className="error">
-          <div className="error-icon">❌</div>
+          <div className="error-icon">Não encontrado</div>
           <p>Talhão não encontrado</p>
           <button onClick={handleBackToTalhoes}>Voltar aos Talhões</button>
         </div>
@@ -171,7 +171,7 @@ const TalhaoDetalhes = () => {
           </button>
         </div>
         <div className="header-content">
-          <h1>🌾 Detalhes do Talhão</h1>
+          <h1>Detalhes do Talhão</h1>
           <p className="header-subtitle">Informações detalhadas do talhão</p>
         </div>
         {propriedade && (
@@ -188,7 +188,7 @@ const TalhaoDetalhes = () => {
             <div className="talhao-card">
               <div className="talhao-card-header">
                 <h2>Talhão #{talhao.id_talhao}</h2>
-                <div className="talhao-icon">🌾</div>
+                <div className="talhao-icon">Talhão</div>
               </div>
               <div className="talhao-card-content">
                 <div className="detail-row">
@@ -210,7 +210,7 @@ const TalhaoDetalhes = () => {
           <div className="talhao-sections">
             <div className="section-card">
               <div className="section-header">
-                <h3>📊 Safras e Condições Climáticas</h3>
+                <h3>Safras e Condições Climáticas</h3>
                 <div className="safras-count">
                   <span>Mostrando {safrasExibidas.length} de {safrasComCondicoes.length} safras</span>
                 </div>
@@ -245,7 +245,7 @@ const TalhaoDetalhes = () => {
                             
                             {safra.condicaoClimatica ? (
                               <div className="condicao-climatica-info">
-                                <h5>🌤️ Condições Climáticas</h5>
+                                <h5>Condições Climáticas</h5>
                                 <div className="condicao-grid">
                                   <div className="condicao-item">
                                     <span className="condicao-label">Precipitação:</span>
@@ -273,7 +273,7 @@ const TalhaoDetalhes = () => {
                               </div>
                             ) : (
                               <div className="no-condicao">
-                                <p>⚠️ Nenhuma condição climática registrada para esta safra</p>
+                                <p>Nenhuma condição climática registrada para esta safra</p>
                               </div>
                             )}
                           </div>
@@ -285,14 +285,14 @@ const TalhaoDetalhes = () => {
                   {!todasSafrasCarregadas && safrasComCondicoes.length > 10 && (
                     <div className="load-more-container">
                       <button className="load-more-btn" onClick={carregarMaisSafras}>
-                        📄 Carregar mais 10 safras
+                        Carregar mais 10 safras
                       </button>
                     </div>
                   )}
                   
                   {todasSafrasCarregadas && safrasComCondicoes.length > 10 && (
                     <div className="all-safras-loaded">
-                      <p>✅ Todas as {safrasComCondicoes.length} safras foram carregadas</p>
+                      <p>Todas as {safrasComCondicoes.length} safras foram carregadas</p>
                     </div>
                   )}
                 </div>

@@ -143,7 +143,7 @@ const Talhao = () => {
     return (
       <div className="talhao-container">
         <div className="loading">
-          <div className="loading-icon">🌾</div>
+          <div className="loading-icon">Carregando...</div>
           <p>Carregando talhões...</p>
         </div>
       </div>
@@ -154,7 +154,7 @@ const Talhao = () => {
     return (
       <div className="talhao-container">
         <div className="error">
-          <div className="error-icon">⚠️</div>
+          <div className="error-icon">Erro</div>
           <p>{error}</p>
           <button onClick={fetchTalhoes}>Tentar novamente</button>
           <button onClick={handleBackToProperties}>Voltar às Propriedades</button>
@@ -170,7 +170,7 @@ const Talhao = () => {
           ← Voltar às Propriedades
         </button>
         <div className="header-content">
-          <h1>🌾 Talhões da Propriedade</h1>
+          <h1>Talhões da Propriedade</h1>
           <p className="header-subtitle">Gerencie os talhões de sua propriedade</p>
         </div>
         {propriedade && ( /* so vai renderizar se propriedade nao for undefined (ou null, false etc) */
@@ -220,7 +220,7 @@ const Talhao = () => {
         <div className="talhoes-list">
           {talhoes.length === 0 ? (
             <div className="no-talhoes">
-              <div className="no-talhoes-icon">🌱</div>
+              <div className="no-talhoes-icon">Nenhum talhão</div>
               <h3>Nenhum talhão cadastrado</h3>
               <p>Nenhum talhão cadastrado nesta propriedade.</p>
               <button 
@@ -234,7 +234,7 @@ const Talhao = () => {
             <div className="talhoes-list-container">
               {talhoes.map((talhao) => (
                 <div key={talhao.id_talhao} className="talhao-list-item">
-                  <div className="talhao-list-icon">🌾</div>
+                  <div className="talhao-list-icon">Talhão</div>
                   <div className="talhao-list-info">
                     <h3>Talhão #{talhao.id_talhao}</h3>
                     <div className="talhao-list-details">

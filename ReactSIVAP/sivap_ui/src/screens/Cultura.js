@@ -101,7 +101,7 @@ const Cultura = () => {
     return (
       <div className="cultura-container">
         <div className="loading">
-          <div className="loading-icon">🌱</div>
+          <div className="loading-icon">Carregando...</div>
           <p>Carregando culturas...</p>
         </div>
       </div>
@@ -112,7 +112,7 @@ const Cultura = () => {
     return (
       <div className="cultura-container">
         <div className="error">
-          <div className="error-icon">⚠️</div>
+          <div className="error-icon">Erro</div>
           <p>{error}</p>
           <button onClick={fetchCulturas}>Tentar novamente</button>
         </div>
@@ -123,7 +123,7 @@ const Cultura = () => {
   return (
     <div className="cultura-container">
       <div className="cultura-left">
-        <div className="cultura-logo">🌱 AgroSIVAP</div>
+        <div className="cultura-logo">AgroSIVAP</div>
         <h1>Gestão de<br />Culturas</h1>
         <p>Cadastre e gerencie as culturas do seu sistema</p>
         
@@ -153,7 +153,7 @@ const Cultura = () => {
               {culturas.map((cultura) => (
                 <div key={cultura.id_cultura} className="cultura-item">
                   <div className="cultura-info">
-                    <span className="cultura-icon">🌾</span>
+                    <span className="cultura-icon">Cultura</span>
                     <span className="cultura-nome">{cultura.nome_cultura}</span>
                   </div>
                   <button 
@@ -172,7 +172,6 @@ const Cultura = () => {
       
       <div className="cultura-right">
         <div className="placeholder-img">
-          🌽<br />
           Gestão de<br />
           Culturas
         </div>

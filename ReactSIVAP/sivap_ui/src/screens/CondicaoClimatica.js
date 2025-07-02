@@ -53,8 +53,8 @@ const CondicaoClimatica = () => {
   const sendForm = async (event) => {
     event.preventDefault();
 
-    if(!idSafra || !precipitacaoMm || !distribuicaoChuvaNota || !velocidadeVentoKmh || !temperaturaMediaC || !observacoes) {
-      alert("Preencha todos os campos para enviar os dados");
+    if(!idSafra || !precipitacaoMm || !distribuicaoChuvaNota || !velocidadeVentoKmh || !temperaturaMediaC) {
+      alert("Preencha todos os campos obrigatórios para enviar os dados");
       return;
     }
 
@@ -70,7 +70,7 @@ const CondicaoClimatica = () => {
           distribuicao_chuva_nota: parseInt(distribuicaoChuvaNota),
           velocidade_vento_kmh: parseFloat(velocidadeVentoKmh),
           temperatura_media_c: parseFloat(temperaturaMediaC),
-          observacoes: observacoes
+          observacoes: observacoes || null
         })
       });
       
@@ -98,9 +98,7 @@ const CondicaoClimatica = () => {
     event.stopPropagation();
     
     const confirmacao = window.confirm(
-      `Tem certeza que deseja deletar esta condição climática?\n\n` +
-      `Esta ação irá deletar:\n` +
-      `• A condição climática da safra #${condicao.id_safra}\n\n` +
+      `Tem certeza que deseja deletar a condição climática da Safra #${condicao.id_safra}?\n\n` +
       `Esta ação não pode ser desfeita!`
     );
 
@@ -117,7 +115,7 @@ const CondicaoClimatica = () => {
         alert('Condição climática deletada com sucesso!');
         fetchCondicoes(); // Recarregar a lista
       } else {
-        alert('Erro ao deletar condição climática. Verifique se não há dependências.');
+        alert('Erro ao deletar condição climática.');
       }
     } catch (error) {
       console.error('Erro ao deletar condição climática:', error);
@@ -128,7 +126,7 @@ const CondicaoClimatica = () => {
   if (isLoading) {
     return (
       <div style={{ textAlign: 'center', padding: '40px' }}>
-        <div style={{ fontSize: '3rem', marginBottom: '15px' }}>🌤️</div>
+        <div style={{ fontSize: '3rem', marginBottom: '15px' }}>Carregando...</div>
         <p>Carregando condições climáticas...</p>
       </div>
     );
@@ -137,7 +135,7 @@ const CondicaoClimatica = () => {
   if (error) {
     return (
       <div style={{ textAlign: 'center', padding: '40px' }}>
-        <div style={{ fontSize: '3rem', marginBottom: '15px' }}>⚠️</div>
+        <div style={{ fontSize: '3rem', marginBottom: '15px' }}>Erro</div>
         <p>{error}</p>
         <button onClick={fetchCondicoes}>Tentar novamente</button>
       </div>
@@ -146,33 +144,29 @@ const CondicaoClimatica = () => {
 
   return (
     <div style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
-      <h1 style={{ color: '#388e3c', marginBottom: '30px' }}>🌤️ Gestão de Condições Climáticas</h1>
+      <h1 style={{ color: '#1976d2', marginBottom: '30px' }}>Gestão de Condições Climáticas</h1>
       
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '30px' }}>
         {/* Formulário */}
         <div style={{ background: '#fff', padding: '25px', borderRadius: '15px', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}>
-          <h2 style={{ color: '#388e3c', marginBottom: '20px' }}>Cadastrar Nova Condição Climática</h2>
+          <h2 style={{ color: '#1976d2', marginBottom: '20px' }}>Cadastrar Nova Condição Climática</h2>
           
           <form onSubmit={sendForm} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
             <div>
               <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500' }}>
-                Safra:
-                <select 
+                ID da Safra:
+                <input 
+                  type="number" 
+                  min="1"
                   value={idSafra}
                   onChange={(e) => setIdSafra(e.target.value)}
                   style={{ width: '100%', padding: '10px', border: '1px solid #ddd', borderRadius: '5px' }}
+                  placeholder="Digite o ID da safra"
                   required
-                >
-                  <option value="">Selecione uma safra</option>
-                  {safras.map(safra => (
-                    <option key={safra.id_safra} value={safra.id_safra}>
-                      Safra #{safra.id_safra} - Talhão #{safra.id_talhao}
-                    </option>
-                  ))}
-                </select>
+                />
               </label>
             </div>
-
+            
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
               <div>
                 <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500' }}>
@@ -180,6 +174,7 @@ const CondicaoClimatica = () => {
                   <input 
                     type="number" 
                     step="0.1"
+                    min="0"
                     value={precipitacaoMm}
                     onChange={(e) => setPrecipitacaoMm(e.target.value)}
                     style={{ width: '100%', padding: '10px', border: '1px solid #ddd', borderRadius: '5px' }}
@@ -190,7 +185,7 @@ const CondicaoClimatica = () => {
               
               <div>
                 <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500' }}>
-                  Distribuição Chuva (1-10):
+                  Distribuição de Chuva (1-10):
                   <input 
                     type="number" 
                     min="1" 
@@ -207,10 +202,11 @@ const CondicaoClimatica = () => {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
               <div>
                 <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500' }}>
-                  Velocidade Vento (km/h):
+                  Velocidade do Vento (km/h):
                   <input 
                     type="number" 
                     step="0.1"
+                    min="0"
                     value={velocidadeVentoKmh}
                     onChange={(e) => setVelocidadeVentoKmh(e.target.value)}
                     style={{ width: '100%', padding: '10px', border: '1px solid #ddd', borderRadius: '5px' }}
@@ -236,13 +232,12 @@ const CondicaoClimatica = () => {
             
             <div>
               <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500' }}>
-                Observações:
+                Observações (opcional):
                 <textarea 
                   value={observacoes}
                   onChange={(e) => setObservacoes(e.target.value)}
-                  style={{ width: '100%', padding: '10px', border: '1px solid #ddd', borderRadius: '5px', minHeight: '80px', resize: 'vertical' }}
-                  placeholder="Descreva observações sobre as condições climáticas..."
-                  required
+                  style={{ width: '100%', padding: '10px', border: '1px solid #ddd', borderRadius: '5px', minHeight: '80px' }}
+                  placeholder="Observações adicionais sobre as condições climáticas..."
                 />
               </label>
             </div>
@@ -250,7 +245,7 @@ const CondicaoClimatica = () => {
             <button 
               type="submit"
               style={{
-                background: '#388e3c',
+                background: '#1976d2',
                 color: 'white',
                 border: 'none',
                 padding: '12px',
@@ -268,7 +263,7 @@ const CondicaoClimatica = () => {
 
         {/* Lista de Condições Climáticas */}
         <div style={{ background: '#fff', padding: '25px', borderRadius: '15px', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }}>
-          <h2 style={{ color: '#388e3c', marginBottom: '20px' }}>Condições Climáticas Cadastradas</h2>
+          <h2 style={{ color: '#1976d2', marginBottom: '20px' }}>Condições Climáticas Cadastradas</h2>
           
           {condicoes.length === 0 ? (
             <div style={{ textAlign: 'center', color: '#666', padding: '20px' }}>
@@ -282,7 +277,7 @@ const CondicaoClimatica = () => {
                   style={{
                     display: 'flex',
                     justifyContent: 'space-between',
-                    alignItems: 'flex-start',
+                    alignItems: 'center',
                     padding: '12px',
                     background: '#f9f9f9',
                     border: '1px solid #e0e0e0',
@@ -290,20 +285,20 @@ const CondicaoClimatica = () => {
                     transition: 'all 0.3s ease'
                   }}
                 >
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: '600', color: '#388e3c', marginBottom: '5px' }}>
+                  <div>
+                    <div style={{ fontWeight: '600', color: '#1976d2' }}>
                       Safra #{condicao.id_safra}
                     </div>
-                    <div style={{ fontSize: '0.9rem', color: '#666', marginBottom: '5px' }}>
+                    <div style={{ fontSize: '0.9rem', color: '#666' }}>
                       Precipitação: {condicao.precipitacao_mm}mm | 
                       Distribuição: {condicao.distribuicao_chuva_nota}/10
                     </div>
-                    <div style={{ fontSize: '0.9rem', color: '#666', marginBottom: '5px' }}>
+                    <div style={{ fontSize: '0.9rem', color: '#666' }}>
                       Vento: {condicao.velocidade_vento_kmh} km/h | 
                       Temperatura: {condicao.temperatura_media_c}°C
                     </div>
                     {condicao.observacoes && (
-                      <div style={{ fontSize: '0.8rem', color: '#888', fontStyle: 'italic' }}>
+                      <div style={{ fontSize: '0.8rem', color: '#888', marginTop: '5px' }}>
                         Obs: {condicao.observacoes}
                       </div>
                     )}
@@ -319,8 +314,7 @@ const CondicaoClimatica = () => {
                       borderRadius: '50%',
                       color: '#d32f2f',
                       opacity: '0.7',
-                      transition: 'all 0.3s ease',
-                      marginLeft: '10px'
+                      transition: 'all 0.3s ease'
                     }}
                     title="Deletar condição climática"
                   >

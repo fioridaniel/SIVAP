@@ -134,7 +134,7 @@ const VariedadeCultura = () => {
   if (isLoading) {
     return (
       <div style={{ textAlign: 'center', padding: '40px' }}>
-        <div style={{ fontSize: '3rem', marginBottom: '15px' }}>🌱</div>
+        <div style={{ fontSize: '3rem', marginBottom: '15px' }}>Carregando...</div>
         <p>Carregando variedades...</p>
       </div>
     );
@@ -143,7 +143,7 @@ const VariedadeCultura = () => {
   if (error) {
     return (
       <div style={{ textAlign: 'center', padding: '40px' }}>
-        <div style={{ fontSize: '3rem', marginBottom: '15px' }}>⚠️</div>
+        <div style={{ fontSize: '3rem', marginBottom: '15px' }}>Erro</div>
         <p>{error}</p>
         <button onClick={fetchVariedades}>Tentar novamente</button>
       </div>
@@ -152,7 +152,7 @@ const VariedadeCultura = () => {
 
   return (
     <div style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
-      <h1 style={{ color: '#388e3c', marginBottom: '30px' }}>🌾 Gestão de Variedades de Cultura</h1>
+      <h1 style={{ color: '#388e3c', marginBottom: '30px' }}>Gestão de Variedades de Cultura</h1>
       
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '30px' }}>
         {/* Formulário */}
