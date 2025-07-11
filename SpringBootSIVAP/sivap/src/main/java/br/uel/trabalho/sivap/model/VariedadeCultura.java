@@ -8,7 +8,12 @@ public class VariedadeCultura {
     private short resistencia_pragas;
     private int ciclo_vegetativo_dias;
     private short produtividade_nota;
+    private String nome_cultura; // Campo adicionado
 
+    // Construtor padrão
+    public VariedadeCultura() {}
+
+    // Construtor completo (opcional, mas pode ser útil)
     public VariedadeCultura(int id_variedade_cultura, int id_cultura, String descricao, 
                            short resistencia_seca, short resistencia_pragas, 
                            int ciclo_vegetativo_dias, short produtividade_nota) {
@@ -21,6 +26,7 @@ public class VariedadeCultura {
         this.produtividade_nota = produtividade_nota;
     }
 
+    // Getters e Setters
     public int getId_variedade_cultura() {
         return id_variedade_cultura;
     }
@@ -75,5 +81,13 @@ public class VariedadeCultura {
 
     public void setProdutividade_nota(short produtividade_nota) {
         this.produtividade_nota = produtividade_nota;
+    }
+
+    public String getNome_cultura() {
+        return nome_cultura;
+    }
+
+    public void setNome_cultura(String nome_cultura) {
+        this.nome_cultura = nome_cultura;
     }
 }

@@ -16,6 +16,22 @@ public class PgVariedadeCulturaDAO implements VariedadeCulturaDAO {
     @Autowired
     private DataSource dataSource;
 
+    private VariedadeCultura fromResultSet(ResultSet rs) throws SQLException {
+        VariedadeCultura variedade = new VariedadeCultura();
+        variedade.setId_variedade_cultura(rs.getInt("id_variedade_cultura"));
+        variedade.setId_cultura(rs.getInt("id_cultura"));
+        variedade.setDescricao(rs.getString("descricao"));
+        variedade.setResistencia_seca(rs.getShort("resistencia_seca"));
+        variedade.setResistencia_pragas(rs.getShort("resistencia_pragas"));
+        variedade.setCiclo_vegetativo_dias(rs.getInt("ciclo_vegetativo_dias"));
+        variedade.setProdutividade_nota(rs.getShort("produtividade_nota"));
+        // Verifica se a coluna nome_cultura existe no resultado
+        if (hasColumn(rs, "nome_cultura")) {
+            variedade.setNome_cultura(rs.getString("nome_cultura"));
+        }
+        return variedade;
+    }
+
     @Override
     public VariedadeCultura inserir(VariedadeCultura variedade) throws SQLException, IOException, ClassNotFoundException {
         String sql = "INSERT INTO variedade_cultura (id_cultura, descricao, resistencia_seca, resistencia_pragas, ciclo_vegetativo_dias, produtividade_nota) VALUES (?, ?, ?, ?, ?, ?)";
@@ -39,22 +55,14 @@ public class PgVariedadeCulturaDAO implements VariedadeCulturaDAO {
 
     @Override
     public VariedadeCultura buscaPorId(int id) throws SQLException, IOException, ClassNotFoundException {
-        String sql = "SELECT * FROM variedade_cultura WHERE id_variedade_cultura = ?";
+        String sql = "SELECT vc.*, c.nome_cultura FROM variedade_cultura vc JOIN cultura c ON vc.id_cultura = c.id_cultura WHERE vc.id_variedade_cultura = ?";
         VariedadeCultura variedade = null;
         try (Connection conn = dataSource.getConnection();
              PreparedStatement pst = conn.prepareStatement(sql)) {
             pst.setInt(1, id);
             try (ResultSet rs = pst.executeQuery()) {
                 if (rs.next()) {
-                    variedade = new VariedadeCultura(
-                        rs.getInt("id_variedade_cultura"),
-                        rs.getInt("id_cultura"),
-                        rs.getString("descricao"),
-                        rs.getShort("resistencia_seca"),
-                        rs.getShort("resistencia_pragas"),
-                        rs.getInt("ciclo_vegetativo_dias"),
-                        rs.getShort("produtividade_nota")
-                    );
+                    variedade = fromResultSet(rs);
                 }
             }
         }
@@ -63,22 +71,13 @@ public class PgVariedadeCulturaDAO implements VariedadeCulturaDAO {
 
     @Override
     public List<VariedadeCultura> listarTodos() throws SQLException, IOException, ClassNotFoundException {
-        String sql = "SELECT * FROM variedade_cultura ORDER BY id_variedade_cultura";
+        String sql = "SELECT vc.*, c.nome_cultura FROM variedade_cultura vc JOIN cultura c ON vc.id_cultura = c.id_cultura ORDER BY c.nome_cultura, vc.descricao";
         List<VariedadeCultura> lista = new ArrayList<>();
         try (Connection conn = dataSource.getConnection();
              Statement st = conn.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
             while (rs.next()) {
-                VariedadeCultura variedade = new VariedadeCultura(
-                    rs.getInt("id_variedade_cultura"),
-                    rs.getInt("id_cultura"),
-                    rs.getString("descricao"),
-                    rs.getShort("resistencia_seca"),
-                    rs.getShort("resistencia_pragas"),
-                    rs.getInt("ciclo_vegetativo_dias"),
-                    rs.getShort("produtividade_nota")
-                );
-                lista.add(variedade);
+                lista.add(fromResultSet(rs));
             }
         }
         return lista;
@@ -108,5 +107,16 @@ public class PgVariedadeCulturaDAO implements VariedadeCulturaDAO {
             pst.setInt(1, id);
             pst.executeUpdate();
         }
+    }
+
+    private boolean hasColumn(ResultSet rs, String columnName) throws SQLException {
+        ResultSetMetaData rsmd = rs.getMetaData();
+        int columns = rsmd.getColumnCount();
+        for (int x = 1; x <= columns; x++) {
+            if (columnName.equals(rsmd.getColumnName(x))) {
+                return true;
+            }
+        }
+        return false;
     }
 } 

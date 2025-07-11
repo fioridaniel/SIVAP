@@ -161,8 +161,11 @@ public class PgPropriedadeDAO implements PropriedadeDAO {
         try (Connection conn = dataSource.getConnection();
              PreparedStatement pst = conn.prepareStatement(sql)) {
 
+            // Remove formatação do CPF (pontos e traços)
+            String cpfLimpo = cpfProdutor.replaceAll("[^0-9]", "");
+
             pst.setInt(1, idPropriedade);
-            pst.setString(2, cpfProdutor);
+            pst.setString(2, cpfLimpo);
 
             pst.executeUpdate();
         }
@@ -175,8 +178,11 @@ public class PgPropriedadeDAO implements PropriedadeDAO {
         try (Connection conn = dataSource.getConnection();
              PreparedStatement pst = conn.prepareStatement(sql)) {
 
+            // Remove formatação do CPF (pontos e traços)
+            String cpfLimpo = cpfProdutor.replaceAll("[^0-9]", "");
+
             pst.setInt(1, idPropriedade);
-            pst.setString(2, cpfProdutor);
+            pst.setString(2, cpfLimpo);
 
             pst.executeUpdate();
         }
@@ -224,7 +230,9 @@ public class PgPropriedadeDAO implements PropriedadeDAO {
         try (Connection conn = dataSource.getConnection();
              PreparedStatement pst = conn.prepareStatement(sql)) {
 
-            pst.setString(1, cpfProdutor);
+            // Remove formatação do CPF (pontos e traços)
+            String cpfLimpo = cpfProdutor.replaceAll("[^0-9]", "");
+            pst.setString(1, cpfLimpo);
 
             try (ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {

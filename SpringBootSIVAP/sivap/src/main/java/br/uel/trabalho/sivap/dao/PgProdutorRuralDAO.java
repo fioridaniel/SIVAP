@@ -25,7 +25,10 @@ public class PgProdutorRuralDAO implements ProdutorRuralDAO {
         try (Connection conn = dataSource.getConnection();
             PreparedStatement pst = conn.prepareStatement(sql)) {
 
-            pst.setString(1, produtor.getCpf());
+            // Remove formatação do CPF (pontos e traços)
+            String cpfLimpo = produtor.getCpf().replaceAll("[^0-9]", "");
+            
+            pst.setString(1, cpfLimpo);
             pst.setString(2, produtor.getNome());
             pst.setString(3, String.valueOf(produtor.getSexo())); // Converte char para String para o JDBC
             pst.setDate(4, new java.sql.Date(produtor.getDt_nasc().getTime())); // Converte java.util.Date para java.sql.Date
@@ -43,18 +46,21 @@ public class PgProdutorRuralDAO implements ProdutorRuralDAO {
         try (Connection conn = dataSource.getConnection();
              PreparedStatement pst = conn.prepareStatement(sql)) {
 
-            pst.setString(1, cpf);
+            // Remove formatação do CPF (pontos e traços)
+            String cpfLimpo = cpf.replaceAll("[^0-9]", "");
+            pst.setString(1, cpfLimpo);
 
             try (ResultSet rs = pst.executeQuery()) {
                 if (rs.next()) {
+                    String cpfDB = rs.getString("cpf");
                     String nome = rs.getString("nome");
                     char sexo = rs.getString("sexo").charAt(0);
                     java.util.Date dtNasc = rs.getDate("dt_nasc");
 
-                    produtor = new ProdutorRural(cpf, nome, sexo, dtNasc);
+                    produtor = new ProdutorRural(cpfDB, nome, sexo, dtNasc);
                     
                     // Carrega as propriedades associadas
-                    List<Propriedade> propriedades = buscarPropriedadesDoProdutor(cpf);
+                    List<Propriedade> propriedades = buscarPropriedadesDoProdutor(cpfDB);
                     produtor.setPropriedades(propriedades);
                 }
             }
@@ -173,5 +179,30 @@ public class PgProdutorRuralDAO implements ProdutorRuralDAO {
             }
         }
         return propriedades;
+    }
+
+    @Override
+    public void alterarSenha(String cpf, String senhaAtual, String novaSenha) throws SQLException, IOException, ClassNotFoundException {
+        // Como não há coluna senha no banco, apenas simula a operação
+        // Verifica se o produtor existe
+        String sqlVerificar = "SELECT cpf FROM produtor_rural WHERE cpf = ?;";
+        
+        // Remove formatação do CPF (pontos e traços)
+        String cpfLimpo = cpf.replaceAll("[^0-9]", "");
+        
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement pst = conn.prepareStatement(sqlVerificar)) {
+
+            pst.setString(1, cpfLimpo);
+
+            try (ResultSet rs = pst.executeQuery()) {
+                if (!rs.next()) {
+                    throw new SQLException("Produtor não encontrado para o CPF: " + cpf);
+                }
+            }
+        }
+        
+        // Simula sucesso na alteração de senha (não faz nada no banco)
+        // Em um sistema real, isso seria implementado com autenticação adequada
     }
 }

@@ -16,6 +16,10 @@ const Talhao = () => {
   const [showForm, setShowForm] = useState(false);
   const [area, setArea] = useState('');
   
+  // Estados para edição
+  const [editingTalhao, setEditingTalhao] = useState(null);
+  const [editArea, setEditArea] = useState('');
+  
   useEffect(() => {
     if (location.state?.propriedade) {
       setPropriedade(location.state.propriedade);
@@ -119,6 +123,53 @@ const Talhao = () => {
     }
   };
 
+  const handleEditTalhao = async (talhao, event) => {
+    event.stopPropagation();
+    setEditingTalhao(talhao);
+    setEditArea(talhao.area.toString());
+  };
+
+  const handleUpdateTalhao = async (event) => {
+    event.preventDefault();
+
+    if(!editArea) {
+      alert("Preencha todos os campos para atualizar os dados");
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:8080/talhoes/${idPropriedade}/${editingTalhao.id_talhao}`, {
+        method:'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id_propriedade: parseInt(idPropriedade),
+          id_talhao: editingTalhao.id_talhao,
+          area: parseFloat(editArea)
+        })
+      });
+      
+      if (response.ok) {
+        alert("Talhão atualizado com sucesso!");
+        setEditArea('');
+        setEditingTalhao(null);
+        fetchTalhoes(); // Recarregar a lista
+      } else {
+        alert("Erro ao atualizar talhão");
+      }
+    }
+    catch(error) {
+      console.log("erro ao processar request: " + error);
+      alert("Erro de conexão com o servidor");
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingTalhao(null);
+    setEditArea('');
+  };
+
   /* campo state no navigate eh usado para passar dados via navegacao */
   const handleBackToProperties = () => {
     navigate('/propriedades', { state: { cpfUsuario: cpfUsuario } });
@@ -131,7 +182,7 @@ const Talhao = () => {
       } */
 
   const handleViewDetails = (talhao) => {
-    navigate(`/talhao-detalhes/${talhao.id_talhao}`, { 
+    navigate(`/propriedades/${idPropriedade}/talhoes/${talhao.id_talhao}`, { 
       state: { 
         propriedade: propriedade, 
         cpfUsuario: cpfUsuario 
@@ -217,6 +268,32 @@ const Talhao = () => {
           </div>
         )}
 
+        {editingTalhao && (
+          <div className="talhao-form-container">
+            <h3>Editar Talhão #{editingTalhao.id_talhao}</h3>
+            <form className="talhao-form" onSubmit={handleUpdateTalhao}>
+              <label>
+                Área (hectares):
+                <input 
+                  type="number" 
+                  step="0.01"
+                  value={editArea}
+                  onChange={(e) => setEditArea(e.target.value)}
+                  placeholder="Digite a área em hectares"
+                  required
+                />
+              </label>
+              
+              <div className="form-buttons">
+                <button type="submit" className="primary-btn">Atualizar Talhão</button>
+                <button type="button" className="secondary-btn" onClick={handleCancelEdit}>
+                  Cancelar
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
+
         <div className="talhoes-list">
           {talhoes.length === 0 ? (
             <div className="no-talhoes">
@@ -250,6 +327,13 @@ const Talhao = () => {
                       onClick={() => handleViewDetails(talhao)}
                     >
                       Ver Detalhes
+                    </button>
+                    <button 
+                      className="edit-btn"
+                      onClick={(e) => handleEditTalhao(talhao, e)}
+                      title="Editar talhão"
+                    >
+                      ✏️
                     </button>
                     <button 
                       className="delete-btn"
