@@ -3,6 +3,7 @@ package br.uel.trabalho.sivap.controller;
 import br.uel.trabalho.sivap.dao.PgPropriedadeDAO;
 import br.uel.trabalho.sivap.model.Propriedade;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -32,18 +33,41 @@ public class PropriedadeController {
     }
 
     @PostMapping
-    public void criar(@RequestBody Propriedade propriedade, @RequestParam(required = false) String cpfProdutor) throws SQLException, IOException, ClassNotFoundException {
+    public ResponseEntity<String> criar(@RequestBody Propriedade propriedade, @RequestParam(required = false) String cpfProdutor) {
         try {
+            // Validações básicas
+            if (propriedade.getNome() == null || propriedade.getNome().trim().isEmpty()) {
+                return ResponseEntity.badRequest().body("Nome da propriedade é obrigatório");
+            }
+            if (propriedade.getLatitude() == null) {
+                return ResponseEntity.badRequest().body("Latitude é obrigatória");
+            }
+            if (propriedade.getLongitude() == null) {
+                return ResponseEntity.badRequest().body("Longitude é obrigatória");
+            }
+            if (propriedade.getArea() == null) {
+                return ResponseEntity.badRequest().body("Área é obrigatória");
+            }
+            
             // Insere a propriedade
             Propriedade propriedadeInserida = propriedadeDAO.inserir(propriedade);
             
             // Se foi fornecido um CPF de produtor, associa automaticamente
             if (cpfProdutor != null && !cpfProdutor.trim().isEmpty()) {
-                propriedadeDAO.associarProdutor(propriedadeInserida.getId(), cpfProdutor);
+                try {
+                    propriedadeDAO.associarProdutor(propriedadeInserida.getId(), cpfProdutor);
+                    return ResponseEntity.ok("Propriedade criada e associada ao produtor com sucesso");
+                } catch (Exception e) {
+                    // Se falhar na associação, pelo menos a propriedade foi criada
+                    return ResponseEntity.ok("Propriedade criada com sucesso, mas houve erro na associação: " + e.getMessage());
+                }
+            } else {
+                return ResponseEntity.ok("Propriedade criada com sucesso");
             }
-        }
-        catch(Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            return ResponseEntity.badRequest().body("Erro ao criar propriedade: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Erro interno do servidor: " + e.getMessage());
         }
     }
 

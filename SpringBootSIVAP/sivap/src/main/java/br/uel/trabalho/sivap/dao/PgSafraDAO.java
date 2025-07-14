@@ -112,21 +112,20 @@ public class PgSafraDAO implements SafraDAO {
     }
 
     @Override
-    public List<SafraComCondicoes> listarPorTalhaoComCondicoes(int idTalhao) throws SQLException, IOException, ClassNotFoundException {
+    public List<SafraComCondicoes> listarPorTalhaoComCondicoes(int idPropriedade, int idTalhao) throws SQLException, IOException, ClassNotFoundException {
         String sql = "SELECT s.*, cc.id_condicao_climatica, cc.precipitacao_mm, cc.distribuicao_chuva_nota, " +
                     "cc.velocidade_max_vento_kmh, cc.temperatura_media_c, cc.observacoes " +
                     "FROM safra s " +
                     "LEFT JOIN condicao_climatica cc ON s.id_safra = cc.id_safra " +
-                    "WHERE s.id_talhao = ? " +
+                    "WHERE s.id_propriedade = ? AND s.id_talhao = ? " +
                     "ORDER BY s.id_safra";
-        
         List<SafraComCondicoes> lista = new ArrayList<>();
         try (Connection conn = dataSource.getConnection();
              PreparedStatement pst = conn.prepareStatement(sql)) {
-            pst.setInt(1, idTalhao);
+            pst.setInt(1, idPropriedade);
+            pst.setInt(2, idTalhao);
             try (ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {
-                    // Criar objeto Safra
                     Safra safra = new Safra(
                         rs.getInt("id_safra"),
                         rs.getInt("id_propriedade"),
@@ -136,8 +135,6 @@ public class PgSafraDAO implements SafraDAO {
                         rs.getDate("dt_colheita"),
                         rs.getBigDecimal("producao")
                     );
-                    
-                    // Criar objeto CondicaoClimatica (pode ser null se não existir)
                     CondicaoClimatica condicaoClimatica = null;
                     if (rs.getObject("id_condicao_climatica") != null) {
                         condicaoClimatica = new CondicaoClimatica(
@@ -150,8 +147,6 @@ public class PgSafraDAO implements SafraDAO {
                             rs.getString("observacoes")
                         );
                     }
-                    
-                    // Criar objeto SafraComCondicoes
                     SafraComCondicoes safraComCondicoes = new SafraComCondicoes(
                         safra.getId_safra(),
                         safra.getId_propriedade(),
@@ -162,12 +157,17 @@ public class PgSafraDAO implements SafraDAO {
                         safra.getProducao(),
                         condicaoClimatica
                     );
-                    
                     lista.add(safraComCondicoes);
                 }
             }
         }
         return lista;
+    }
+
+    @Override
+    public List<SafraComCondicoes> listarPorTalhaoComCondicoes(int idTalhao) throws SQLException, IOException, ClassNotFoundException {
+        // Chama o novo método com idPropriedade = -1 (não filtra por propriedade)
+        return listarPorTalhaoComCondicoes(-1, idTalhao);
     }
 
     @Override

@@ -1,6 +1,6 @@
 import '../styles/Propriedade.css';
 import { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 
 function App() {
   const [nome, setNome] = useState('');
@@ -9,8 +9,11 @@ function App() {
   const [longitude, setLongitude] = useState('');
   const [cpfUsuario, setCpfUsuario] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [propriedadeId, setPropriedadeId] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const { id } = useParams();
 
   useEffect(() => {
     // Pegar o CPF do usuário do estado da navegação
@@ -20,8 +23,39 @@ function App() {
       // Se não tiver CPF, redirecionar para login
       navigate('/login');
     }
-  }, [location.state, navigate]);
+
+    // Se há um ID na URL, estamos editando uma propriedade existente
+    if (id) {
+      setIsEditing(true);
+      setPropriedadeId(parseInt(id));
+      fetchPropriedade(parseInt(id));
+    }
+  }, [location.state, navigate, id]);
   
+  const fetchPropriedade = async (id) => {
+    try {
+      setIsLoading(true);
+      const response = await fetch(`http://localhost:8080/propriedades/${id}`);
+      
+      if (response.ok) {
+        const propriedade = await response.json();
+        setNome(propriedade.nome);
+        setArea(propriedade.area.toString());
+        setLatitude(propriedade.latitude.toString());
+        setLongitude(propriedade.longitude.toString());
+      } else {
+        alert('Erro ao carregar propriedade');
+        navigate('/propriedades', { state: { cpfUsuario: cpfUsuario } });
+      }
+    } catch (error) {
+      console.error('Erro ao buscar propriedade:', error);
+      alert('Erro de conexão com o servidor');
+      navigate('/propriedades', { state: { cpfUsuario: cpfUsuario } });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const sendForm = async (event) => {
     event.preventDefault();
 
@@ -39,8 +73,14 @@ function App() {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`http://localhost:8080/propriedades?cpfProdutor=${cpfUsuario}`, {
-        method: 'POST',
+      const url = isEditing 
+        ? `http://localhost:8080/propriedades/${propriedadeId}`
+        : `http://localhost:8080/propriedades?cpfProdutor=${cpfUsuario}`;
+      
+      const method = isEditing ? 'PUT' : 'POST';
+      
+      const response = await fetch(url, {
+        method: method,
         headers: {
           'Content-Type': 'application/json',
         },
@@ -53,7 +93,8 @@ function App() {
       });
 
       if (response.ok) {
-        alert("Propriedade cadastrada com sucesso!");
+        const message = isEditing ? "Propriedade atualizada com sucesso!" : "Propriedade cadastrada com sucesso!";
+        alert(message);
         // Limpar formulário
         setNome('');
         setArea('');
@@ -62,7 +103,8 @@ function App() {
         // Redirecionar para a lista de propriedades
         navigate('/propriedades', { state: { cpfUsuario: cpfUsuario } });
       } else {
-        alert("Erro ao cadastrar propriedade. Tente novamente.");
+        const errorMessage = isEditing ? "Erro ao atualizar propriedade." : "Erro ao cadastrar propriedade.";
+        alert(errorMessage + " Tente novamente.");
       }
     } catch(error) {
       console.log("erro ao processar request: " + error);
@@ -76,6 +118,17 @@ function App() {
     navigate('/propriedades', { state: { cpfUsuario: cpfUsuario } });
   };
 
+  if (isLoading && isEditing) {
+    return (
+      <div className="propriedade-form-container">
+        <div className="loading">
+          <div className="loading-icon">Carregando...</div>
+          <p>Carregando dados da propriedade...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="propriedade-form-container">
       <div className="propriedade-form-header">
@@ -83,8 +136,10 @@ function App() {
           ← Voltar para Propriedades
         </button>
         <div className="header-content">
-          <h1>🏡 Cadastrar Nova Propriedade</h1>
-          <p className="header-subtitle">Adicione uma nova propriedade ao seu perfil</p>
+          <h1>🏡 {isEditing ? 'Editar Propriedade' : 'Cadastrar Nova Propriedade'}</h1>
+          <p className="header-subtitle">
+            {isEditing ? 'Edite os dados da propriedade' : 'Adicione uma nova propriedade ao seu perfil'}
+          </p>
         </div>
         <div className="user-info">
           <span>CPF: {cpfUsuario}</span>
@@ -154,7 +209,7 @@ function App() {
               className="primary-btn"
               disabled={isLoading}
             >
-              {isLoading ? 'Cadastrando...' : 'Cadastrar Propriedade'}
+              {isLoading ? (isEditing ? 'Atualizando...' : 'Cadastrando...') : (isEditing ? 'Atualizar Propriedade' : 'Cadastrar Propriedade')}
             </button>
             <button 
               type="button" 

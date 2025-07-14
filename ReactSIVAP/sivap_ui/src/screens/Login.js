@@ -12,19 +12,11 @@ export default function Login() {
 
   // Lista de CPFs válidos para teste
   const cpfsValidos = [
-    { cpf: "18729640369", nome: "Pedro Miguel Pastor" },
-    { cpf: "94152067802", nome: "Dr. Henrique Costela" },
-    { cpf: "10273846507", nome: "Dra. Maria Laura Moura" },
-    { cpf: "51784302988", nome: "Bianca Sales" },
-    { cpf: "21048756335", nome: "Melissa Silva" },
-    { cpf: "29761043878", nome: "Bella Pinto" },
-    { cpf: "57239140652", nome: "Isabella Machado" },
-    { cpf: "26574903874", nome: "Dra. Stella da Costa" },
-    { cpf: "25640831960", nome: "Luiz Felipe Aparecida" },
-    { cpf: "37410562943", nome: "Ana Moura" },
-    { cpf: "93571802497", nome: "Laís Pires" },
-    { cpf: "48362597119", nome: "Anthony Gabriel Cardoso" },
-    { cpf: "65379120407", nome: "Bruno Melo" }
+    { cpf: "87349612087", nome: "Dr. Joaquim da Mota" },
+    { cpf: "60849213703", nome: "Sra. Eduarda Freitas" },
+    { cpf: "29560817302", nome: "Théo Nascimento" },
+    { cpf: "62715834071", nome: "Pedro Miguel Melo" },
+    { cpf: "91843750600", nome: "Ana Laura da Luz" }
   ];
 
   // Função para formatar CPF automaticamente
@@ -134,7 +126,13 @@ export default function Login() {
           </button>
         </form>
         <div className="login-signup">
-          Não tem uma conta? <a href="#">Cadastre-se</a>
+          Não tem uma conta? <button onClick={() => navigate('/criar-conta')} style={{ 
+            background: 'none', 
+            border: 'none', 
+            color: '#388e3c', 
+            textDecoration: 'underline', 
+            cursor: 'pointer' 
+          }}>Cadastre-se</button>
         </div>
       </div>
       <div className="login-right">
