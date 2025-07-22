@@ -109,4 +109,35 @@ public class PgVariedadeCulturaDAO implements VariedadeCulturaDAO {
             pst.executeUpdate();
         }
     }
+
+    @Override
+    public List<Object[]> variedadesComProducaoPorPropriedade(int idPropriedade) throws SQLException, IOException, ClassNotFoundException {
+        String sql = "SELECT " +
+                "vc.id_variedade_cultura, " +
+                "c.nome_cultura, " +
+                "SUM(s.producao) AS total_produzido " +
+                "FROM safra s " +
+                "JOIN variedade_cultura vc ON s.id_variedade_cultura = vc.id_variedade_cultura " +
+                "JOIN cultura c ON vc.id_cultura = c.id_cultura " +
+                "JOIN talhao t ON s.id_talhao = t.id_talhao " +
+                "WHERE t.id_propriedade = ? " +
+                "GROUP BY vc.id_variedade_cultura, c.nome_cultura " +
+                "ORDER BY total_produzido DESC";
+        
+        List<Object[]> resultado = new ArrayList<>();
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setInt(1, idPropriedade);
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    Object[] linha = new Object[3];
+                    linha[0] = rs.getInt("id_variedade_cultura");
+                    linha[1] = rs.getString("nome_cultura");
+                    linha[2] = rs.getDouble("total_produzido");
+                    resultado.add(linha);
+                }
+            }
+        }
+        return resultado;
+    }
 } 
