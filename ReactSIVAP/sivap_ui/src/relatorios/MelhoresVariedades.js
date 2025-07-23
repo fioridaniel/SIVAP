@@ -9,6 +9,8 @@ const MelhoresVariedades = () => {
     const [isLoading, setLoading] = useState(false);
     const [error, setErro] = useState(null);
 
+    const { idPropriedade } = useParams();
+
     useEffect(() => {
         pegarSafras();
     }, []);
@@ -20,7 +22,7 @@ const MelhoresVariedades = () => {
     /* obs: dados hardcoded so para testar com mais facilidade (nao sou burro)*/
     const pegarSafras = async () => {
         try { 
-            const responseTalhoes = await fetch(`http://localhost:8080/talhoes/propriedade/2`);
+            const responseTalhoes = await fetch(`http://localhost:8080/talhoes/propriedade/${idPropriedade}`);
             if(responseTalhoes.ok) {
                 const talhoes = await responseTalhoes.json();                
               
@@ -47,7 +49,7 @@ const MelhoresVariedades = () => {
     }
     
     const pegarProducaoPorSafraPorVariedade = async () => {
-        const response = await fetch(`http://localhost:8080/variedades-cultura/com-producao/propriedade/1`);
+        const response = await fetch(`http://localhost:8080/variedades-cultura/com-producao/propriedade/${idPropriedade}`);
         const dados = await response.json();
 
         // dados sera algo como:

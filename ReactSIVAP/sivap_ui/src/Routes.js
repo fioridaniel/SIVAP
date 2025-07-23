@@ -37,9 +37,9 @@ export default function AppRoutes() {
       <Route path="/safra" element={<Safra />} />
       <Route path="/condicao-climatica" element={<CondicaoClimatica />} />
       <Route path="/propriedade" element={<Propriedade/>} />
-      <Route path="/relatorios-pretendidos/melhores-talhoes" element={<MelhoresTalhoes/>} />
+      <Route path="/relatorios-pretendidos/melhores-talhoes/:idPropriedade" element={<MelhoresTalhoes/>} />
       <Route path="/propriedade/:id" element={<Propriedade/>} />
-      <Route path="/relatorios-pretendidos/melhores-variedades" element={<MelhoresVariedades/>} />
+      <Route path="/relatorios-pretendidos/melhores-variedades/:idPropriedade" element={<MelhoresVariedades/>} />
       
       {/* Rotas dos Relatórios */}
       <Route path="/relatorios/produtividade" element={<RelatorioProdutividade/>} />

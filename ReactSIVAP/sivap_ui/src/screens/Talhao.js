@@ -224,13 +224,34 @@ const Talhao = () => {
           <h1>Talhões da Propriedade</h1>
           <p className="header-subtitle">Gerencie os talhões de sua propriedade</p>
         </div>
-        {propriedade && ( /* so vai renderizar se propriedade nao for undefined (ou null, false etc) */
+        {propriedade && (
           <div className="propriedade-info">
             <h2>{propriedade.nome}</h2>
             <p>Área total: {propriedade.area} hectares</p>
           </div>
         )}
       </div>
+
+      {/* Botões de Relatórios - início */}
+      <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', marginBottom: '24px' }}>
+        <button
+          className="primary-btn"
+          style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '1rem' }}
+          onClick={() => navigate(`/relatorios-pretendidos/melhores-talhoes/${idPropriedade}`)}
+        >
+          <span role="img" aria-label="Ranking"></span>
+          Melhores Talhões
+        </button>
+        <button
+          className="primary-btn"
+          style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '1rem' }}
+          onClick={() => navigate(`/relatorios-pretendidos/melhores-variedades/${idPropriedade}`)}
+        >
+          <span role="img" aria-label="Variedades"></span>
+          Melhores Variedades
+        </button>
+      </div>
+      {/* Botões de Relatórios - fim */}
 
       <div className="talhao-content">
         <div className="talhao-actions">

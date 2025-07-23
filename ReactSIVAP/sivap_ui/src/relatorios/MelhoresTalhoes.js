@@ -34,7 +34,7 @@ const RelatoriosPretendidos = () => {
     const buscarTalhoes = async () => {
         console.log("Iniciando busca de talhões...");
         try {
-            const resposta = await fetch(`http://localhost:8080/talhoes/propriedade/1`);
+            const resposta = await fetch(`http://localhost:8080/talhoes/propriedade/${idPropriedade}`);
             console.log("Resposta da API talhões:", resposta.status);
             
             if(resposta.ok) {
