@@ -23,6 +23,9 @@ public class Safra {
         this.producao = producao;
     }
 
+    public Safra() {
+    }
+
     public int getId_safra() {
         return id_safra;
     }

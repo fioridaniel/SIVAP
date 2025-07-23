@@ -12,6 +12,15 @@ const CondicaoClimatica = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
   
+  // Estados para edição
+  const [editingCondicao, setEditingCondicao] = useState(null);
+  const [editIdSafra, setEditIdSafra] = useState('');
+  const [editPrecipitacaoMm, setEditPrecipitacaoMm] = useState('');
+  const [editDistribuicaoChuvaNota, setEditDistribuicaoChuvaNota] = useState('');
+  const [editVelocidadeVentoKmh, setEditVelocidadeVentoKmh] = useState('');
+  const [editTemperaturaMediaC, setEditTemperaturaMediaC] = useState('');
+  const [editObservacoes, setEditObservacoes] = useState('');
+  
   useEffect(() => {
     fetchCondicoes();
     fetchSafras();
@@ -121,6 +130,72 @@ const CondicaoClimatica = () => {
       console.error('Erro ao deletar condição climática:', error);
       alert('Erro de conexão com o servidor');
     }
+  };
+
+  const handleEditCondicao = (condicao, event) => {
+    event.stopPropagation();
+    setEditingCondicao(condicao);
+    setEditIdSafra(condicao.id_safra.toString());
+    setEditPrecipitacaoMm(condicao.precipitacao_mm.toString());
+    setEditDistribuicaoChuvaNota(condicao.distribuicao_chuva_nota.toString());
+    setEditVelocidadeVentoKmh(condicao.velocidade_vento_kmh.toString());
+    setEditTemperaturaMediaC(condicao.temperatura_media_c.toString());
+    setEditObservacoes(condicao.observacoes || '');
+  };
+
+  const handleUpdateCondicao = async (event) => {
+    event.preventDefault();
+
+    if(!editIdSafra || !editPrecipitacaoMm || !editDistribuicaoChuvaNota || !editVelocidadeVentoKmh || !editTemperaturaMediaC) {
+      alert("Preencha todos os campos obrigatórios para atualizar os dados");
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:8080/condicoes-climaticas/${editingCondicao.id_condicao_climatica}`, {
+        method:'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id_safra: parseInt(editIdSafra),
+          precipitacao_mm: parseFloat(editPrecipitacaoMm),
+          distribuicao_chuva_nota: parseInt(editDistribuicaoChuvaNota),
+          velocidade_vento_kmh: parseFloat(editVelocidadeVentoKmh),
+          temperatura_media_c: parseFloat(editTemperaturaMediaC),
+          observacoes: editObservacoes || null
+        })
+      });
+      
+      if (response.ok) {
+        alert("Condição climática atualizada com sucesso!");
+        // Limpar formulário de edição
+        setEditIdSafra('');
+        setEditPrecipitacaoMm('');
+        setEditDistribuicaoChuvaNota('');
+        setEditVelocidadeVentoKmh('');
+        setEditTemperaturaMediaC('');
+        setEditObservacoes('');
+        setEditingCondicao(null);
+        fetchCondicoes(); // Recarregar a lista
+      } else {
+        alert("Erro ao atualizar condição climática");
+      }
+    }
+    catch(error) {
+      console.log("erro ao processar request: " + error);
+      alert("Erro de conexão com o servidor");
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingCondicao(null);
+    setEditIdSafra('');
+    setEditPrecipitacaoMm('');
+    setEditDistribuicaoChuvaNota('');
+    setEditVelocidadeVentoKmh('');
+    setEditTemperaturaMediaC('');
+    setEditObservacoes('');
   };
 
   if (isLoading) {
@@ -259,6 +334,140 @@ const CondicaoClimatica = () => {
               Cadastrar Condição Climática
             </button>
           </form>
+
+          {editingCondicao && (
+            <div style={{ marginTop: '30px', padding: '20px', background: '#f5f5f5', borderRadius: '10px', border: '2px solid #1976d2' }}>
+              <h3 style={{ color: '#1976d2', marginBottom: '20px' }}>Editar Condição Climática</h3>
+              
+              <form onSubmit={handleUpdateCondicao} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                <div>
+                  <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500' }}>
+                    ID da Safra:
+                    <input 
+                      type="number" 
+                      min="1"
+                      value={editIdSafra}
+                      onChange={(e) => setEditIdSafra(e.target.value)}
+                      style={{ width: '100%', padding: '10px', border: '1px solid #ddd', borderRadius: '5px' }}
+                      placeholder="Digite o ID da safra"
+                      required
+                    />
+                  </label>
+                </div>
+                
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                  <div>
+                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500' }}>
+                      Precipitação (mm):
+                      <input 
+                        type="number" 
+                        step="0.1"
+                        min="0"
+                        value={editPrecipitacaoMm}
+                        onChange={(e) => setEditPrecipitacaoMm(e.target.value)}
+                        style={{ width: '100%', padding: '10px', border: '1px solid #ddd', borderRadius: '5px' }}
+                        required
+                      />
+                    </label>
+                  </div>
+                  
+                  <div>
+                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500' }}>
+                      Distribuição de Chuva (1-10):
+                      <input 
+                        type="number" 
+                        min="1" 
+                        max="10"
+                        value={editDistribuicaoChuvaNota}
+                        onChange={(e) => setEditDistribuicaoChuvaNota(e.target.value)}
+                        style={{ width: '100%', padding: '10px', border: '1px solid #ddd', borderRadius: '5px' }}
+                        required
+                      />
+                    </label>
+                  </div>
+                </div>
+                
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                  <div>
+                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500' }}>
+                      Velocidade do Vento (km/h):
+                      <input 
+                        type="number" 
+                        step="0.1"
+                        min="0"
+                        value={editVelocidadeVentoKmh}
+                        onChange={(e) => setEditVelocidadeVentoKmh(e.target.value)}
+                        style={{ width: '100%', padding: '10px', border: '1px solid #ddd', borderRadius: '5px' }}
+                        required
+                      />
+                    </label>
+                  </div>
+                  
+                  <div>
+                    <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500' }}>
+                      Temperatura Média (°C):
+                      <input 
+                        type="number" 
+                        step="0.1"
+                        value={editTemperaturaMediaC}
+                        onChange={(e) => setEditTemperaturaMediaC(e.target.value)}
+                        style={{ width: '100%', padding: '10px', border: '1px solid #ddd', borderRadius: '5px' }}
+                        required
+                      />
+                    </label>
+                  </div>
+                </div>
+                
+                <div>
+                  <label style={{ display: 'block', marginBottom: '5px', fontWeight: '500' }}>
+                    Observações (opcional):
+                    <textarea 
+                      value={editObservacoes}
+                      onChange={(e) => setEditObservacoes(e.target.value)}
+                      style={{ width: '100%', padding: '10px', border: '1px solid #ddd', borderRadius: '5px', minHeight: '80px' }}
+                      placeholder="Observações adicionais sobre as condições climáticas..."
+                    />
+                  </label>
+                </div>
+                
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <button 
+                    type="submit"
+                    style={{
+                      background: '#1976d2',
+                      color: 'white',
+                      border: 'none',
+                      padding: '12px',
+                      borderRadius: '8px',
+                      fontSize: '1rem',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      flex: 1
+                    }}
+                  >
+                    Atualizar Condição Climática
+                  </button>
+                  <button 
+                    type="button"
+                    onClick={handleCancelEdit}
+                    style={{
+                      background: '#666',
+                      color: 'white',
+                      border: 'none',
+                      padding: '12px',
+                      borderRadius: '8px',
+                      fontSize: '1rem',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      flex: 1
+                    }}
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </form>
+            </div>
+          )}
         </div>
 
         {/* Lista de Condições Climáticas */}
@@ -303,23 +512,42 @@ const CondicaoClimatica = () => {
                       </div>
                     )}
                   </div>
-                  <button 
-                    onClick={(e) => handleDeleteCondicao(condicao, e)}
-                    style={{
-                      background: 'none',
-                      border: 'none',
-                      fontSize: '1.2rem',
-                      cursor: 'pointer',
-                      padding: '6px',
-                      borderRadius: '50%',
-                      color: '#d32f2f',
-                      opacity: '0.7',
-                      transition: 'all 0.3s ease'
-                    }}
-                    title="Deletar condição climática"
-                  >
-                    🗑️
-                  </button>
+                  <div style={{ display: 'flex', gap: '5px' }}>
+                    <button 
+                      onClick={(e) => handleEditCondicao(condicao, e)}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        fontSize: '1.2rem',
+                        cursor: 'pointer',
+                        padding: '6px',
+                        borderRadius: '50%',
+                        color: '#1976d2',
+                        opacity: '0.7',
+                        transition: 'all 0.3s ease'
+                      }}
+                      title="Editar condição climática"
+                    >
+                      ✏️
+                    </button>
+                    <button 
+                      onClick={(e) => handleDeleteCondicao(condicao, e)}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        fontSize: '1.2rem',
+                        cursor: 'pointer',
+                        padding: '6px',
+                        borderRadius: '50%',
+                        color: '#d32f2f',
+                        opacity: '0.7',
+                        transition: 'all 0.3s ease'
+                      }}
+                      title="Deletar condição climática"
+                    >
+                      🗑️
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>

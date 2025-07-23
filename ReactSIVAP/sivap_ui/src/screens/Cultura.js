@@ -7,6 +7,10 @@ const Cultura = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
   
+  // Estados para edição
+  const [editingCultura, setEditingCultura] = useState(null);
+  const [editNomeCultura, setEditNomeCultura] = useState('');
+  
   useEffect(() => {
     fetchCulturas();
   }, []);
@@ -97,6 +101,51 @@ const Cultura = () => {
     }
   };
 
+  const handleEditCultura = (cultura, event) => {
+    event.stopPropagation();
+    setEditingCultura(cultura);
+    setEditNomeCultura(cultura.nome_cultura);
+  };
+
+  const handleUpdateCultura = async (event) => {
+    event.preventDefault();
+
+    if(!editNomeCultura) {
+      alert("Preencha todos os campos para atualizar os dados");
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:8080/culturas/${editingCultura.id_cultura}`, {
+        method:'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          nome_cultura: editNomeCultura
+        })
+      });
+      
+      if (response.ok) {
+        alert("Cultura atualizada com sucesso!");
+        setEditNomeCultura('');
+        setEditingCultura(null);
+        fetchCulturas(); // Recarregar a lista
+      } else {
+        alert("Erro ao atualizar cultura");
+      }
+    }
+    catch(error) {
+      console.log("erro ao processar request: " + error);
+      alert("Erro de conexão com o servidor");
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingCultura(null);
+    setEditNomeCultura('');
+  };
+
   if (isLoading) {
     return (
       <div className="cultura-container">
@@ -142,6 +191,31 @@ const Cultura = () => {
           <button type="submit">Cadastrar Cultura</button>
         </form>
 
+        {editingCultura && (
+          <div className="cultura-edit-form">
+            <h3>Editar Cultura</h3>
+            <form onSubmit={handleUpdateCultura}>
+              <label>
+                Nome da Cultura:
+                <input 
+                  type="text" 
+                  value={editNomeCultura}
+                  onChange={(e) => setEditNomeCultura(e.target.value)}
+                  placeholder="Digite o nome da cultura"
+                  required
+                />
+              </label>
+              
+              <div className="form-buttons">
+                <button type="submit">Atualizar Cultura</button>
+                <button type="button" onClick={handleCancelEdit}>
+                  Cancelar
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
+
         <div className="culturas-list">
           <h3>Culturas Cadastradas</h3>
           {culturas.length === 0 ? (
@@ -156,13 +230,22 @@ const Cultura = () => {
                     <span className="cultura-icon">Cultura</span>
                     <span className="cultura-nome">{cultura.nome_cultura}</span>
                   </div>
-                  <button 
-                    className="delete-btn"
-                    onClick={(e) => handleDeleteCultura(cultura, e)}
-                    title="Deletar cultura"
-                  >
-                    🗑️
-                  </button>
+                  <div className="cultura-actions">
+                    <button 
+                      className="edit-btn"
+                      onClick={(e) => handleEditCultura(cultura, e)}
+                      title="Editar cultura"
+                    >
+                      ✏️
+                    </button>
+                    <button 
+                      className="delete-btn"
+                      onClick={(e) => handleDeleteCultura(cultura, e)}
+                      title="Deletar cultura"
+                    >
+                      🗑️
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>

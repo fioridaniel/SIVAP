@@ -50,6 +50,13 @@ const PropriedadesUsuario = () => {
     });
   };
 
+  const handleEditPropriedade = (propriedade, event) => {
+    event.stopPropagation(); // Evita que o clique propague para o item da lista
+    navigate(`/propriedade/${propriedade.id}`, { 
+      state: { propriedade: propriedade, cpfUsuario: cpfUsuario } 
+    });
+  };
+
   const handleDeletePropriedade = async (propriedade, event) => {
     event.stopPropagation(); // Evita que o clique propague para o item da lista
     
@@ -89,6 +96,51 @@ const PropriedadesUsuario = () => {
     navigate('/login');
   };
 
+  const handleAlterarSenha = () => {
+    navigate('/alterar-senha', { state: { cpfUsuario: cpfUsuario } });
+  };
+
+  const handleDeletarConta = async () => {
+    const confirmacao = window.confirm(
+      `Tem certeza que deseja deletar sua conta?\n\n` +
+      `Esta ação irá deletar:\n` +
+      `• Sua conta de produtor\n` +
+      `• Todas as suas propriedades\n` +
+      `• Todos os talhões das propriedades\n` +
+      `• Todas as safras dos talhões\n` +
+      `• Todas as condições climáticas das safras\n\n` +
+      `Esta ação não pode ser desfeita!\n\n` +
+      `Digite "DELETAR" para confirmar:`
+    );
+
+    if (!confirmacao) {
+      return;
+    }
+
+    const confirmacaoFinal = prompt("Digite 'DELETAR' para confirmar a exclusão da conta:");
+    
+    if (confirmacaoFinal !== "DELETAR") {
+      alert("Operação cancelada.");
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:8080/produtores/${cpfUsuario}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        alert('Conta deletada com sucesso!');
+        navigate('/login');
+      } else {
+        alert('Erro ao deletar conta. Verifique se não há dependências.');
+      }
+    } catch (error) {
+      console.error('Erro ao deletar conta:', error);
+      alert('Erro de conexão com o servidor');
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="propriedades-container">
@@ -121,9 +173,17 @@ const PropriedadesUsuario = () => {
         </div>
         <div className="user-info">
           <span>CPF: {cpfUsuario}</span>
-          <button className="logout-btn" onClick={handleLogout}>
-            Sair
-          </button>
+          <div className="user-actions">
+            <button className="alterar-senha-btn" onClick={handleAlterarSenha}>
+              🔐 Alterar Senha
+            </button>
+            <button className="deletar-conta-btn" onClick={handleDeletarConta}>
+              🗑️ Deletar Conta
+            </button>
+            <button className="logout-btn" onClick={handleLogout}>
+              Sair
+            </button>
+          </div>
         </div>
       </div>
 
@@ -164,6 +224,13 @@ const PropriedadesUsuario = () => {
                 </div>
                 <div className="property-list-actions">
                   <span className="view-talhoes">Ver Talhões →</span>
+                  <button 
+                    className="edit-btn"
+                    onClick={(e) => handleEditPropriedade(propriedade, e)}
+                    title="Editar propriedade"
+                  >
+                    ✏️
+                  </button>
                   <button 
                     className="delete-btn"
                     onClick={(e) => handleDeletePropriedade(propriedade, e)}

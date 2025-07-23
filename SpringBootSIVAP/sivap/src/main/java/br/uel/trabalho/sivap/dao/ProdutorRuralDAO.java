@@ -60,4 +60,12 @@ public interface ProdutorRuralDAO {
      * @return Lista de propriedades associadas ao produtor.
      */
     List<Propriedade> buscarPropriedadesDoProdutor(String cpfProdutor) throws SQLException, IOException, ClassNotFoundException;
+
+    /**
+     * Altera a senha de um produtor rural.
+     * @param cpf O CPF do produtor.
+     * @param senhaAtual A senha atual do produtor.
+     * @param novaSenha A nova senha do produtor.
+     */
+    void alterarSenha(String cpf, String senhaAtual, String novaSenha) throws SQLException, IOException, ClassNotFoundException;
 }

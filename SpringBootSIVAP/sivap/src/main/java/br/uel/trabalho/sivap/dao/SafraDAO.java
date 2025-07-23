@@ -42,6 +42,14 @@ public interface SafraDAO {
     List<SafraComCondicoes> listarPorTalhaoComCondicoes(int idTalhao) throws SQLException, IOException, ClassNotFoundException;
 
     /**
+     * Lista todas as safras de um talhão específico de uma propriedade específica com suas condições climáticas.
+     * @param idPropriedade id da propriedade
+     * @param idTalhao id do talhão
+     * @return Uma lista de todos os objetos SafraComCondicoes do talhão com condições climáticas.
+     */
+    List<SafraComCondicoes> listarPorTalhaoComCondicoes(int idPropriedade, int idTalhao) throws SQLException, IOException, ClassNotFoundException;
+
+    /**
      * Atualiza os dados de uma safra existente no banco.
      * @param safra uma instância da classe Safra com os dados atualizados.
      */

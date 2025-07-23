@@ -11,6 +11,8 @@ import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 @Repository
 public class PgPropriedadeDAO implements PropriedadeDAO {
@@ -90,8 +92,14 @@ public class PgPropriedadeDAO implements PropriedadeDAO {
      */
     @Override
     public List<Propriedade> listarTodos() throws SQLException, IOException, ClassNotFoundException {
-        String sql = "SELECT id, nome, latitude, longitude, area FROM propriedade ORDER BY nome;";
+        String sql = "SELECT p.id, p.nome, p.latitude, p.longitude, p.area, " +
+                    "pr.cpf as produtor_cpf, pr.nome as produtor_nome, pr.sexo as produtor_sexo, pr.dt_nasc as produtor_dt_nasc " +
+                    "FROM propriedade p " +
+                    "LEFT JOIN produtor_propriedade pp ON p.id = pp.id_propriedade " +
+                    "LEFT JOIN produtor_rural pr ON pp.cpf_produtor_rural = pr.cpf " +
+                    "ORDER BY p.nome, pr.nome;";
         List<Propriedade> propriedades = new ArrayList<>();
+        Map<Integer, Propriedade> propriedadesMap = new HashMap<>();
 
         try (Connection conn = dataSource.getConnection();
              Statement st = conn.createStatement();
@@ -99,19 +107,30 @@ public class PgPropriedadeDAO implements PropriedadeDAO {
 
             while (rs.next()) {
                 int id = rs.getInt("id");
-                String nome = rs.getString("nome");
-                BigDecimal latitude = rs.getBigDecimal("latitude");
-                BigDecimal longitude = rs.getBigDecimal("longitude");
-                BigDecimal area = rs.getBigDecimal("area");
+                
+                // Se a propriedade ainda não foi criada, cria ela
+                if (!propriedadesMap.containsKey(id)) {
+                    String nome = rs.getString("nome");
+                    BigDecimal latitude = rs.getBigDecimal("latitude");
+                    BigDecimal longitude = rs.getBigDecimal("longitude");
+                    BigDecimal area = rs.getBigDecimal("area");
 
-                // Cria um novo objeto Propriedade para cada registro
-                Propriedade propriedade = new Propriedade(id, nome, latitude, longitude, area);
+                    Propriedade propriedade = new Propriedade(id, nome, latitude, longitude, area);
+                    propriedade.setProdutores(new ArrayList<>());
+                    propriedadesMap.put(id, propriedade);
+                    propriedades.add(propriedade);
+                }
                 
-                // Carrega os produtores associados
-                List<ProdutorRural> produtores = buscarProdutoresDaPropriedade(id);
-                propriedade.setProdutores(produtores);
-                
-                propriedades.add(propriedade);
+                // Adiciona o produtor se existir
+                String produtorCpf = rs.getString("produtor_cpf");
+                if (produtorCpf != null) {
+                    String produtorNome = rs.getString("produtor_nome");
+                    char produtorSexo = rs.getString("produtor_sexo").charAt(0);
+                    java.util.Date produtorDtNasc = rs.getDate("produtor_dt_nasc");
+                    
+                    ProdutorRural produtor = new ProdutorRural(produtorCpf, produtorNome, produtorSexo, produtorDtNasc);
+                    propriedadesMap.get(id).getProdutores().add(produtor);
+                }
             }
         }
         return propriedades;
@@ -161,8 +180,11 @@ public class PgPropriedadeDAO implements PropriedadeDAO {
         try (Connection conn = dataSource.getConnection();
              PreparedStatement pst = conn.prepareStatement(sql)) {
 
+            // Remove formatação do CPF (pontos e traços)
+            String cpfLimpo = cpfProdutor.replaceAll("[^0-9]", "");
+
             pst.setInt(1, idPropriedade);
-            pst.setString(2, cpfProdutor);
+            pst.setString(2, cpfLimpo);
 
             pst.executeUpdate();
         }
@@ -175,8 +197,11 @@ public class PgPropriedadeDAO implements PropriedadeDAO {
         try (Connection conn = dataSource.getConnection();
              PreparedStatement pst = conn.prepareStatement(sql)) {
 
+            // Remove formatação do CPF (pontos e traços)
+            String cpfLimpo = cpfProdutor.replaceAll("[^0-9]", "");
+
             pst.setInt(1, idPropriedade);
-            pst.setString(2, cpfProdutor);
+            pst.setString(2, cpfLimpo);
 
             pst.executeUpdate();
         }
@@ -224,7 +249,9 @@ public class PgPropriedadeDAO implements PropriedadeDAO {
         try (Connection conn = dataSource.getConnection();
              PreparedStatement pst = conn.prepareStatement(sql)) {
 
-            pst.setString(1, cpfProdutor);
+            // Remove formatação do CPF (pontos e traços)
+            String cpfLimpo = cpfProdutor.replaceAll("[^0-9]", "");
+            pst.setString(1, cpfLimpo);
 
             try (ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {

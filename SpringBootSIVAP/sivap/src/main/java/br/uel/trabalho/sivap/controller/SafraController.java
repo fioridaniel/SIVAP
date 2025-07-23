@@ -37,9 +37,14 @@ public class SafraController {
         return safraDAO.listarPorTalhaoComCondicoes(idTalhao);
     }
 
+    @GetMapping("/talhao/{idPropriedade}/{idTalhao}/com-condicoes")
+    public List<SafraComCondicoes> listarPorTalhaoComCondicoes(@PathVariable int idPropriedade, @PathVariable int idTalhao) throws SQLException, IOException, ClassNotFoundException {
+        return safraDAO.listarPorTalhaoComCondicoes(idPropriedade, idTalhao);
+    }
+
     @PostMapping
-    public void criar(@RequestBody Safra safra) throws SQLException, IOException, ClassNotFoundException {
-        safraDAO.inserir(safra);
+    public Safra criar(@RequestBody Safra safra) throws SQLException, IOException, ClassNotFoundException {
+        return safraDAO.inserir(safra);
     }
 
     @PutMapping("/{id}")

@@ -1,5 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Login from "./screens/Login";
+import CriarConta from "./screens/CriarConta";
+import AlterarSenha from "./screens/AlterarSenha";
 import PropriedadesUsuario from "./screens/PropriedadesUsuario";
 import Talhao from './screens/Talhao';
 import TalhaoDetalhes from './screens/TalhaoDetalhes';
@@ -17,16 +19,20 @@ export default function AppRoutes() {
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/criar-conta" element={<CriarConta />} />
+      <Route path="/alterar-senha" element={<AlterarSenha />} />
       <Route path="/propriedades" element={<PropriedadesUsuario />} />
       <Route path="/talhoes/:idPropriedade" element={<Talhao />} />
-      <Route path="/talhao-detalhes/:idTalhao" element={<TalhaoDetalhes />} />
-      <Route path="/adicionar-safra/:idTalhao" element={<AdicionarSafra />} />
+      <Route path="/propriedades/:idPropriedade/talhoes/:idTalhao" element={<TalhaoDetalhes />} />
+      <Route path="/propriedades/:idPropriedade/talhoes/:idTalhao/adicionar-safra" element={<AdicionarSafra />} />
+      <Route path="/propriedades/:idPropriedade/talhoes/:idTalhao/editar-safra" element={<AdicionarSafra />} />
       <Route path="/variedade" element={<VariedadeCultura />} />
       <Route path="/cultura" element={<Cultura />} />
       <Route path="/safra" element={<Safra />} />
       <Route path="/condicao-climatica" element={<CondicaoClimatica />} />
       <Route path="/propriedade" element={<Propriedade/>} />
       <Route path="/relatorios-pretendidos/melhores-talhoes" element={<MelhoresTalhoes/>} />
+      <Route path="/propriedade/:id" element={<Propriedade/>} />
       <Route path="/relatorios-pretendidos/melhores-variedades" element={<MelhoresVariedades/>} />
       {/* Outras rotas podem ser adicionadas aqui */}
     </Routes>

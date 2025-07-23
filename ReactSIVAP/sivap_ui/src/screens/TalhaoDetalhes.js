@@ -3,7 +3,7 @@ import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import '../styles/Talhao.css';
 
 const TalhaoDetalhes = () => {
-  const { idTalhao } = useParams();
+  const { idPropriedade, idTalhao } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
   const [talhao, setTalhao] = useState(null);
@@ -37,14 +37,14 @@ const TalhaoDetalhes = () => {
       setIsLoading(true);
       
       // Buscar detalhes do talhão
-      const talhaoResponse = await fetch(`http://localhost:8080/talhoes/${idTalhao}`);
+      const talhaoResponse = await fetch(`http://localhost:8080/talhoes/${idPropriedade}/${idTalhao}`);
       
       if (talhaoResponse.ok) {
         const talhaoData = await talhaoResponse.json();
         setTalhao(talhaoData);
         
         // Buscar safras com suas condições climáticas em uma única requisição
-        const safrasResponse = await fetch(`http://localhost:8080/safras/talhao/${idTalhao}/com-condicoes`);
+        const safrasResponse = await fetch(`http://localhost:8080/safras/talhao/${idPropriedade}/${idTalhao}/com-condicoes`);
         if (safrasResponse.ok) {
           const safrasData = await safrasResponse.json();
           setSafrasComCondicoes(safrasData);
@@ -96,13 +96,25 @@ const TalhaoDetalhes = () => {
     }
   };
 
+  const handleEditSafra = (safra, event) => {
+    event.stopPropagation();
+    navigate(`/propriedades/${idPropriedade}/talhoes/${idTalhao}/editar-safra`, { 
+      state: { 
+        propriedade: propriedade, 
+        cpfUsuario: cpfUsuario,
+        talhao: talhao,
+        safra: safra
+      } 
+    });
+  };
+
   const carregarMaisSafras = () => {
     const novasSafrasVisiveis = Math.min(safrasVisiveis + 10, safrasComCondicoes.length);
     setSafrasVisiveis(novasSafrasVisiveis);
   };
 
   const handleBackToTalhoes = () => {
-    navigate(`/talhoes/${propriedade?.id || ''}`, { 
+    navigate(`/talhoes/${idPropriedade}`, { 
       state: { 
         propriedade: propriedade, 
         cpfUsuario: cpfUsuario 
@@ -159,7 +171,7 @@ const TalhaoDetalhes = () => {
           </button>
           <button 
             className="add-safra-btn" 
-            onClick={() => navigate(`/adicionar-safra/${idTalhao}`, { 
+            onClick={() => navigate(`/propriedades/${idPropriedade}/talhoes/${idTalhao}/adicionar-safra`, { 
               state: { 
                 propriedade: propriedade, 
                 cpfUsuario: cpfUsuario,
@@ -227,13 +239,22 @@ const TalhaoDetalhes = () => {
                         <div className="safra-info">
                           <div className="safra-header">
                             <h4>Safra #{safra.id_safra}</h4>
-                            <button 
-                              className="delete-btn"
-                              onClick={(e) => handleDeleteSafra(safra, e)}
-                              title="Deletar safra"
-                            >
-                              🗑️
-                            </button>
+                            <div className="safra-actions">
+                              <button 
+                                className="edit-btn"
+                                onClick={(e) => handleEditSafra(safra, e)}
+                                title="Editar safra"
+                              >
+                                ✏️
+                              </button>
+                              <button 
+                                className="delete-btn"
+                                onClick={(e) => handleDeleteSafra(safra, e)}
+                                title="Deletar safra"
+                              >
+                                🗑️
+                              </button>
+                            </div>
                           </div>
                           <div className="safra-details">
                             <div className="safra-basic-info">
