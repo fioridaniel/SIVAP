@@ -6,6 +6,8 @@ import '../styles/MelhoresVariedades.css';
 const MelhoresVariedades = () => {
     const [safras, setSafras] = useState([]);
     const [producaoTotalPorVariedade, setProducaoTotalPorVariedade] = useState([]);
+    const [isLoading, setLoading] = useState(false);
+    const [error, setErro] = useState(null);
 
     useEffect(() => {
         pegarSafras();

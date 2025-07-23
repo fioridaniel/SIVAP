@@ -90,7 +90,7 @@ const RelatoriosPretendidos = () => {
                             numSafras: numSafras
                         });
 
-                        console.log(`Talhão ${talhao.id_talhao}: ${mediaPorArea.toFixed(2)}`);
+                        console.log(`Talhão ${talhao.id_talhao}: ${mediaPorArea.toFixed(2)}`); /* duas casas decimais */
                     } 
                     
                     else {
