@@ -1,20 +1,9 @@
-/* 
-    dados que preciso: 
-    - pegar todas as safras
-    - para cada safra, pegar sua respectiva variedade de cultura e producao. 
-    - para cada variedade de cultura, acumular o total produzido em todas as safras.
-    - penso que faz sentido rankear as variedades de cultura pela conta => total_produzido / num_safras
-        da respectiva variedade de cultura analisada. o que acha? 
-*/
-
 import { useEffect, useState } from "react";
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import '../styles/MelhoresVariedades.css';
 
 /* seria interessante adicionar o nome da cultura do lado do ranking, fica menos obscuro. */
-
 const MelhoresVariedades = () => {
-    /* estados */
     const [safras, setSafras] = useState([]);
     const [producaoTotalPorVariedade, setProducaoTotalPorVariedade] = useState([]);
 
@@ -32,12 +21,11 @@ const MelhoresVariedades = () => {
             const responseTalhoes = await fetch(`http://localhost:8080/talhoes/propriedade/2`);
             if(responseTalhoes.ok) {
                 const talhoes = await responseTalhoes.json();                
-                
-                /* vetor temporario para armazenar todas as safras daquela propriedade */
+              
                 const todasSafras = [];
                 for(const talhao of talhoes) { /* loop que pega todos as safras de todos os talhoes dessa propriedade */
                     const idTalhao = talhao.id_talhao;
-                    const responseSafras = await fetch(`http://localhost:8080/safras/talhao/${idTalhao}`); /* idTalhao */
+                    const responseSafras = await fetch(`http://localhost:8080/safras/talhao/${idTalhao}`);
                     if(responseSafras.ok) {
                         const safras = await responseSafras.json();
                         /* pegar o nome da variedade */
@@ -46,14 +34,16 @@ const MelhoresVariedades = () => {
                 }
 
                 setSafras(todasSafras);
+                pegarProducaoPorSafraPorVariedade(todasSafras);
             }
-        }
-        
-        catch(error) {
-            console.log(error);
+        } catch(error) {
+            console.error('Erro ao carregar dados:', error);
+            setErro('Erro ao carregar dados das safras');
+        } finally {
+            setLoading(false);
         }
     }
-
+    
     const pegarProducaoPorSafraPorVariedade = async () => {
         const response = await fetch(`http://localhost:8080/variedades-cultura/com-producao/propriedade/1`);
         const dados = await response.json();

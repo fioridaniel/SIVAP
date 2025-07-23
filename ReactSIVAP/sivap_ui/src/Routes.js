@@ -13,6 +13,12 @@ import CondicaoClimatica from './screens/CondicaoClimatica';
 import Propriedade from './screens/Propriedade';
 import MelhoresTalhoes from '../src/relatorios/MelhoresTalhoes';
 import MelhoresVariedades from '../src/relatorios/MelhoresVariedades';
+import RelatorioProdutividade from '../src/relatorios/RelatorioProdutividade';
+import RelatorioVariedades from '../src/relatorios/RelatorioVariedades';
+import RelatorioTemporal from '../src/relatorios/RelatorioTemporal';
+import RelatorioClimatico from '../src/relatorios/RelatorioClimatico';
+import RelatorioProdutores from '../src/relatorios/RelatorioProdutores';
+import RelatorioResistencia from '../src/relatorios/RelatorioResistencia';
 
 export default function AppRoutes() {
   return (
@@ -34,6 +40,15 @@ export default function AppRoutes() {
       <Route path="/relatorios-pretendidos/melhores-talhoes" element={<MelhoresTalhoes/>} />
       <Route path="/propriedade/:id" element={<Propriedade/>} />
       <Route path="/relatorios-pretendidos/melhores-variedades" element={<MelhoresVariedades/>} />
+      
+      {/* Rotas dos Relatórios */}
+      <Route path="/relatorios/produtividade" element={<RelatorioProdutividade/>} />
+      <Route path="/relatorios/variedades" element={<RelatorioVariedades/>} />
+      <Route path="/relatorios/temporal" element={<RelatorioTemporal/>} />
+      <Route path="/relatorios/climatico" element={<RelatorioClimatico/>} />
+      <Route path="/relatorios/produtores" element={<RelatorioProdutores/>} />
+      <Route path="/relatorios/resistencia" element={<RelatorioResistencia/>} />
+      
       {/* Outras rotas podem ser adicionadas aqui */}
     </Routes>
   );

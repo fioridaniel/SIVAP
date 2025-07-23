@@ -7,6 +7,7 @@ const PropriedadesUsuario = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
   const [cpfUsuario, setCpfUsuario] = useState('');
+  const [showRelatorios, setShowRelatorios] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -174,6 +175,9 @@ const PropriedadesUsuario = () => {
         <div className="user-info">
           <span>CPF: {cpfUsuario}</span>
           <div className="user-actions">
+            <button className="relatorios-btn" onClick={() => setShowRelatorios(!showRelatorios)}>
+              📊 Relatórios
+            </button>
             <button className="alterar-senha-btn" onClick={handleAlterarSenha}>
               🔐 Alterar Senha
             </button>
@@ -186,6 +190,65 @@ const PropriedadesUsuario = () => {
           </div>
         </div>
       </div>
+
+      {showRelatorios && (
+        <div className="relatorios-menu">
+          <div className="relatorios-header">
+            <h3>📊 Relatórios Disponíveis</h3>
+            <button className="close-relatorios" onClick={() => setShowRelatorios(false)}>✕</button>
+          </div>
+          <div className="relatorios-grid">
+            <button 
+              className="relatorio-item"
+              onClick={() => navigate('/relatorios/produtividade')}
+            >
+              <span className="relatorio-icon">📈</span>
+              <span className="relatorio-title">Produtividade</span>
+              <span className="relatorio-desc">Produtividade por propriedade</span>
+            </button>
+            <button 
+              className="relatorio-item"
+              onClick={() => navigate('/relatorios/variedades')}
+            >
+              <span className="relatorio-icon">🌱</span>
+              <span className="relatorio-title">Variedades</span>
+              <span className="relatorio-desc">Variedades mais plantadas</span>
+            </button>
+            <button 
+              className="relatorio-item"
+              onClick={() => navigate('/relatorios/temporal')}
+            >
+              <span className="relatorio-icon">📅</span>
+              <span className="relatorio-title">Temporal</span>
+              <span className="relatorio-desc">Produção por ano</span>
+            </button>
+            <button 
+              className="relatorio-item"
+              onClick={() => navigate('/relatorios/climatico')}
+            >
+              <span className="relatorio-icon">🌤️</span>
+              <span className="relatorio-title">Climático</span>
+              <span className="relatorio-desc">Condições climáticas médias</span>
+            </button>
+            <button 
+              className="relatorio-item"
+              onClick={() => navigate('/relatorios/produtores')}
+            >
+              <span className="relatorio-icon">👨‍🌾</span>
+              <span className="relatorio-title">Produtores</span>
+              <span className="relatorio-desc">Produtores mais ativos</span>
+            </button>
+            <button 
+              className="relatorio-item"
+              onClick={() => navigate('/relatorios/resistencia')}
+            >
+              <span className="relatorio-icon">🛡️</span>
+              <span className="relatorio-title">Resistência</span>
+              <span className="relatorio-desc">Resistência de variedades</span>
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="propriedades-content">
         {propriedades.length === 0 ? (
