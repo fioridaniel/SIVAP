@@ -11,7 +11,7 @@ import Cultura from './screens/Cultura';
 import Safra from './screens/Safra';
 import CondicaoClimatica from './screens/CondicaoClimatica';
 import Propriedade from './screens/Propriedade';
-import RelatoriosPretendidos from '../src/relatorios/RelatoriosPretendidos';
+import MelhoresTalhoes from '../src/relatorios/MelhoresTalhoes';
 import MelhoresVariedades from '../src/relatorios/MelhoresVariedades';
 
 export default function AppRoutes() {
@@ -31,8 +31,8 @@ export default function AppRoutes() {
       <Route path="/safra" element={<Safra />} />
       <Route path="/condicao-climatica" element={<CondicaoClimatica />} />
       <Route path="/propriedade" element={<Propriedade/>} />
+      <Route path="/relatorios-pretendidos/melhores-talhoes" element={<MelhoresTalhoes/>} />
       <Route path="/propriedade/:id" element={<Propriedade/>} />
-      <Route path="/relatorios-pretendidos" element={<RelatoriosPretendidos/>} />
       <Route path="/relatorios-pretendidos/melhores-variedades" element={<MelhoresVariedades/>} />
       {/* Outras rotas podem ser adicionadas aqui */}
     </Routes>

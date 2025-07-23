@@ -41,4 +41,9 @@ public class VariedadeCulturaController {
     public void deletar(@PathVariable int id) throws SQLException, IOException, ClassNotFoundException {
         variedadeCulturaDAO.deletar(id);
     }
+
+    @GetMapping("/com-producao/propriedade/{idPropriedade}")
+    public List<Object[]> variedadesComProducaoPorPropriedade(@PathVariable int idPropriedade) throws SQLException, IOException, ClassNotFoundException {
+        return variedadeCulturaDAO.variedadesComProducaoPorPropriedade(idPropriedade);
+    }
 } 

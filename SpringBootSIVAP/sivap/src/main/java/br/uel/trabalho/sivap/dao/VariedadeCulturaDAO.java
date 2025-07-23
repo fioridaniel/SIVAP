@@ -37,4 +37,11 @@ public interface VariedadeCulturaDAO {
      * @param id da variedade de cultura a ser removida.
      */
     void deletar(int id) throws SQLException, IOException, ClassNotFoundException;
+
+    /**
+     * Busca variedades de cultura plantadas em uma propriedade com nome da cultura e produção total.
+     * @param idPropriedade id da propriedade
+     * @return Lista de objetos contendo id_variedade_cultura, nome_cultura e total_produzido
+     */
+    List<Object[]> variedadesComProducaoPorPropriedade(int idPropriedade) throws SQLException, IOException, ClassNotFoundException;
 } 
